@@ -1,11 +1,18 @@
 from flask import Flask
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
-@app.route("/members")
+client = MongoClient("mongodb://localhost:27018/")
+db = client["packup"]
+users = db["users"]
 
+
+# Example route
+@app.route("/members")
 def members():
     return {"members": ["Member1", "Member2", "Member3"]}
+
 
 if __name__ == "__main__":
     app.run(debug=True)
