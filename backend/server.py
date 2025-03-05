@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["packup"]
@@ -13,6 +16,17 @@ users = db["users"]
 def members():
     return {"members": ["Member1", "Member2", "Member3"]}
 
+# create new user route
+@app.route("/users", methods=["POST"])
+def create_user():
+    data = request.get_json()
+
+    users.insert_one({
+        "username": data.get("username"),
+        "age": data.get("age")
+    })
+
+    return jsonify({"username": data.get("username")}), 201
 
 if __name__ == "__main__":
     app.run(debug=True)
