@@ -20,5 +20,11 @@ def delete(username):
     users.delete_one({"username": username})
     return jsonify({"message": f"Deleted {username}"}), 200
 
+
+@app.route("/users", methods=["GET"])
+def get_users():
+    get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
+    return jsonify(list(get_users)), 200
+
 if __name__ == "__main__":
     app.run(debug=True)
