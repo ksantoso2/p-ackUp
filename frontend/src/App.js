@@ -1,9 +1,14 @@
-import CreateUser from './welcome/CreateUser';
+import Signup from './welcome/Signup';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import React from 'react';
 
 function App() {
   return (
-    <CreateUser />
+    <Router>
+      <Routes>
+        <Route path="/signup" element={<Signup /> } />
+      </Routes>
+    </Router>
   );
 }
 
