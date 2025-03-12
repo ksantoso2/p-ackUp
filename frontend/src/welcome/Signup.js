@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-const CreateUser = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [age, setAge] = useState('');
   const [message, setMessage] = useState('');
@@ -16,18 +16,29 @@ const CreateUser = () => {
 
     setMessage (`User Created!`); // success message
   }
+
   return (
-    <div>
-      <input type = "text" id = "username" name = "username" placeholder = "Username" 
-        onChange={(e) => setUsername(e.target.value)}/> 
-      <br />
-      <input type = "number" id = "age" name = "age" placeholder = "Age"
-        onChange={(e) => setAge(e.target.value)}/>
-      <br />
-      <button onClick={handleUser}>Create User</button>
+    <div style = {{alignItems: "center"}}>
+      <input 
+        type="text" 
+        placeholder="Username" 
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <br></br>
+      <input 
+        type="number" 
+        placeholder="Age" 
+        onChange={(e) => setAge(e.target.value)}
+      />
+      <br></br>
+      <button 
+        onClick={handleUser}
+      >
+        Create User
+      </button>
       <p>{message}</p>
     </div>
   );
 }
 
-export default CreateUser
+export default Signup
