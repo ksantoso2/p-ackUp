@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom'
+import "./Signup.css"
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -15,32 +16,49 @@ const Signup = () => {
       },
       body: JSON.stringify({username, age: Number(age) }), // convert age to integer
     });
+    if (!username || !age){
+      alert('Both fields are required!');
+      return;
+    }
 
     setMessage (`User Created!`); // success message
     navigate('/chat'); // redirect
   }
 
+
   return (
-    <div style = {{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", height: "100vh"}}>
+  <div>
+    <div style = {{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", height:"100vh"}}>
+      <div style={{textAlign:"center"}}>
+      <h1 style={{marginBottom: "10px"}}>
+        Welcome!
+      </h1>
+      <h2 style={{marginTop: "10px"}}>
+        Let's start exploring...
+      </h2>
+      </div>
       <input 
         type="text" 
-        placeholder="Username" 
+        placeholder="Enter your username" 
         onChange={(e) => setUsername(e.target.value)}
-        style = {{marginBottom: "15px", padding: "8px", width: "210px"}}
+        required
+        style = {{marginBottom: "15px", padding:"10px", width:"200px", borderRadius:"10px", border:"1px solid black"}}
       />
       <input 
         type="number" 
-        placeholder="Age" 
+        placeholder="Enter your age" 
         onChange={(e) => setAge(e.target.value)}
-        style = {{marginBottom: "15px", padding: "8px", width: "210px"}}
+        required
+        style = {{marginBottom: "15px", padding:"10px", width:"200px", borderRadius:"10px", border:"1px solid black"}}
       />
       <button 
         onClick={handleUser}
-        style= {{padding: "8px 15px"}}
+        style = {{padding:"10px 20px", borderRadius:"50px", border:"none"}}
       >
         Create User
       </button>
       <p>{message}</p>
+    </div>
     </div>
   );
 }
