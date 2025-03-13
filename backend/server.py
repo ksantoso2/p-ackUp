@@ -25,6 +25,10 @@ def create_user():
 
     return jsonify({"message": "User created!", "username": username, "age": age})
 
+@app.route("/users/<username>",methods=["DELETE"])
+def delete(username):
+    users.delete_one({"username": username})
+    return jsonify({"message": f"Deleted {username}"}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
