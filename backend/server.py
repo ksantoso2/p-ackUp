@@ -32,6 +32,13 @@ def create_user():
 
     return jsonify({"username": data.get("username")}), 201
 
+# route to get all users
+@app.route("/users", methods=["GET"])
+def get_users():
+    get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
+    return jsonify(list(get_users)), 200
+
+
 #GET request to get one user
 @app.route("/users/<username>", methods=["GET"])
 def get_user(username):
@@ -44,7 +51,6 @@ def get_user(username):
         }), 200
     else:
         return jsonify({"error": "User not found"}), 404
-
 
 if __name__ == "__main__":
     app.run(debug=True)
