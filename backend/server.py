@@ -15,11 +15,19 @@ users = db["users"]
 def members():
     return {"members": ["Member1", "Member2", "Member3"]}
 
+  
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
     users.delete_one({"username": username})
     return jsonify({"message": f"Deleted {username}"}), 200
 
+
+@app.route("/users", methods=["GET"])
+def get_users():
+    get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
+    return jsonify(list(get_users)), 200
+
+  
 @app.route("/users", methods=["POST"])
 def create_user():
     data = request.get_json()
