@@ -21,7 +21,7 @@ const Login = () => {
             navigate('/chat');
         } else {
             setMessage('Username not found!')
-            navigate('/Signup');
+            navigate('/signup');
         }
 
     }
@@ -57,7 +57,7 @@ const Login = () => {
             />
             
             <button 
-            onClick={checkUsernameExist}
+            onClick={() => checkUsernameExist(username)}
             style = {{padding:"10px 20px", borderRadius:"50px", border:"none"}}
             >
             Login
