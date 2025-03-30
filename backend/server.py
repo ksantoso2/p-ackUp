@@ -9,9 +9,9 @@ import os
 app = Flask(__name__)
 
 load_dotenv()
-GEMINI_API_KEY = os.getenv("S_GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-#variable name is "sensitive"? DO NOT CHANGE 
+#variable name is "sensitive" DO NOT CHANGE (need _ ?)
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 CORS(app)
