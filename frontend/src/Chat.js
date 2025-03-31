@@ -55,10 +55,6 @@ const Chat = () => {
                     ))}
                 </div>
             </section>
-
-            
-                
-
                 <div className="bottom-section">
                     <div className="input-container">
                         <input
@@ -79,8 +75,6 @@ const Chat = () => {
                 </div>
 
                 {error && <p className="error">{error}</p>}
-
-          
         </div>
         </section>
     );
