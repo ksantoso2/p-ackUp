@@ -1,0 +1,103 @@
+.main {
+    display: flex;
+    height: 100vh;
+}
+
+h1 {
+    text-align: top left;
+    flex-direction: left;
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    align-items: bottom;
+    justify-content: bottom;
+    width: 100%;
+}
+
+.sidebar .history {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow-y: auto;
+}
+
+.history .you {
+    display: block;
+    text-align: right;
+    margin-left: auto;
+}
+
+.history .bot {
+    display: block;
+    text-align: left;
+    margin-right: auto;
+}
+
+.bottom-section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* .input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: bottom right;
+    justify-content: bottom;
+    width: 100%;
+    background-color: green;
+} */
+
+.textbox {
+    display:flex;
+    flex-direction: column;
+    align-items: bottom right;
+    justify-content: bottom;
+    height: 100px;
+    width: 100%;
+  
+}
+
+.textbox input {
+    width: 100%;
+    height: 100%;
+}
+
+.new-chat button{
+    height: 50px;
+    width: 50px;
+}
+
+.submit {
+    position:relative;
+    height: 100vh;
+}
+
+.error {
+    text-align: center;
+
+}
+
+.column {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center
+}
+.left {
+    flex: 1;
+    height: 100%;
+    align-self: flex-start;
+    border-right: 2px solid #ccc;
+} 
+  
+.right {
+flex: 3;
+height: 100%;
+align-self: flex-end;
+display: flex;
+flex-direction: column;
+justify-content: flex-end;
+}
