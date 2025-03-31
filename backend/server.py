@@ -5,10 +5,12 @@ from google import genai        #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
 
-
-
-
 app = Flask(__name__)
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+#variable name is "sensitive" DO NOT CHANGE (need _ ?)
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 
 load_dotenv()
@@ -32,12 +34,10 @@ users = db["users"]
 def members():
     return {"members": ["Member1", "Member2", "Member3"]}
 
-
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
     users.delete_one({"username": username})
     return jsonify({"message": f"Deleted {username}"}), 200
-
 
 # API route
 @app.route("/gemini", methods = ['POST'])
@@ -45,23 +45,34 @@ def gemini():
     data = request.get_json()
     print("Received data:", data)  
 
-
     user_input = data.get("user_input", "").strip()
     if not user_input:
         return jsonify({"error": "No input provided"}), 400
 
-
-   
     response = gemini_client.models.generate_content(
     model="gemini-2.0-flash",
     contents = user_input,
     )
-    print("Response from Gemini:", response.text)
+    
+    print("Response from Gemini:", response.text) 
     return jsonify({"response": response.text}), 200
 
 
-   
+@app.route("/users", methods=["GET"])
+def get_users():
+    get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
+    return jsonify(list(get_users)), 200
 
+  
+@app.route("/users", methods=["POST"])
+def create_user():
+    data = request.get_json()
+    username = data["username"]
+    age = data["age"]
+
+    users.insert_one({"username": username, "age": age})
+
+    return jsonify({"message": "User created!", "username": username, "age": age})
 
 if __name__ == "__main__":
     app.run(debug=True)
