@@ -9,17 +9,14 @@ const Chat = () => {
     const [error, setError] = useState(null);
     const [history, setHistory] = useState([]);
 
-
     const handleAPI = async () => {
         if (!user_input.trim()) {
             setError("Input cannot be empty.");
             return;
         }
 
-
         setLoading(true);
         setError(null);
-
 
         try {
             const res = await fetch('http://127.0.0.1:5000/gemini', {
@@ -28,15 +25,13 @@ const Chat = () => {
                 body: JSON.stringify({ user_input }),
             });
 
-
             if (!res.ok) {
                 throw new Error(`HTTP error! Status: ${res.status}`);
             }
 
-
             const data = await res.json();
             set_response(data.response);
-            setHistory([...history, { question: user_input, answer: data.response }]);
+            setHistory([...history, { question: user_input, answer: data.response }]); 
             set_user_input('');
         } catch (err) {
             setError(err.message);
@@ -45,13 +40,11 @@ const Chat = () => {
         }
     };
 
-
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             handleAPI();
         }
     };
-
 
     return (
         <section className="main">
@@ -67,17 +60,12 @@ const Chat = () => {
             <section className="sidebar">
                 <div className="history">
                     {history.map((entry, index) => (
-                         <p key={index}>
-                         <div className="you">{entry.question}</div>
-                         <div className="bot">{entry.answer}</div>
-                     </p>
+                        <p key={index}><strong>You:</strong> {entry.question} <br /> <strong>Bot:</strong> {entry.answer}</p>
                     ))}
                 </div>
             </section>
-
                 <div className="bottom-section">
-                    {/* <div className="input-container"> */}
-                        <div className="textbox">
+                    <div className="input-container">
                         <input
                             type="text"
                             placeholder="Enter your trip question"
@@ -87,26 +75,21 @@ const Chat = () => {
                             autoFocus
                         />
                         </div>
-                    
-                    
                          <div id="submit" onClick={handleAPI}>
                             <svg viewBox="0 0 24 24" width="24" height="24">
                                 <path fill="currentColor" d="M12 4l-8 8h6v8h4v-8h6z"></path>
                             </svg>
                         </div>
-                        <div className = "new-chat">
 
-                        
+                        <div className = "new-chat">
                         <button onClick={() => setHistory([])}>New chat</button>
-                        </div>
                     </div>
                 </div>
+
                 {error && <p className="error">{error}</p>}
         </div>
-        {/* </div> */}
-        </section>
     );
 };
 
-
 export default Chat;
+
