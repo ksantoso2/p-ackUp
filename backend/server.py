@@ -10,7 +10,7 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("S_GEMINI_API_KEY")
 
 #variable name is "sensitive"? DO NOT CHANGE 
-gemini_client = genai.Client(api_key="GEMINI_API_KEY")    #UPDATE API KEY FOR OTHER USERS
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 CORS(app)
 
