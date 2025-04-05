@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './Chat.css';
+
 
 const Chat = () => {
     const [user_input, set_user_input] = useState('');
@@ -46,7 +48,14 @@ const Chat = () => {
 
     return (
         <section className="main">
-                <h1>p-ackUp</h1>
+    
+        <div class = "column left">
+            <h1>p-ackUp</h1>
+            <button background-color="808080">Trips</button>
+            <button >Plan</button>
+        </div>
+        
+        <div class = "column right">
         <div className="chat-container">
             <section className="sidebar">
                 <div className="history">
@@ -65,19 +74,22 @@ const Chat = () => {
                             onKeyPress={handleKeyPress}
                             autoFocus
                         />
+                        </div>
                          <div id="submit" onClick={handleAPI}>
                             <svg viewBox="0 0 24 24" width="24" height="24">
                                 <path fill="currentColor" d="M12 4l-8 8h6v8h4v-8h6z"></path>
                             </svg>
                         </div>
+
+                        <div className = "new-chat">
                         <button onClick={() => setHistory([])}>New chat</button>
                     </div>
                 </div>
 
                 {error && <p className="error">{error}</p>}
         </div>
-        </section>
     );
 };
 
 export default Chat;
+
