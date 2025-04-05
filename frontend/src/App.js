@@ -8,6 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/chat" element={<Chat />} />
+        <Route path="/signup" element={<Signup /> } />
       </Routes>
     </Router>
   );

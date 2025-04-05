@@ -32,7 +32,7 @@ users = db["users"]
 # Example route
 @app.route("/members")
 def members():
-    return {"members": ["Member1", "Member2", "Member3"]}
+    return {"members": ["Member1", "Member2", "Member3, Member4, Member5, Member6, Member7"]}
 
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
