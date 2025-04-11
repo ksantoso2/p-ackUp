@@ -49,13 +49,13 @@ const Chat = () => {
     return (
         <section className="main">
     
-        <div class = "column left">
+        <div className = "column left">
             <h1>p-ackUp</h1>
             <button background-color="808080">Trips</button>
             <button >Plan</button>
         </div>
         
-        <div class = "column right">
+        <div className = "column right">
         <div className="chat-container">
             <section className="sidebar">
                 <div className="history">
@@ -88,8 +88,10 @@ const Chat = () => {
 
                 {error && <p className="error">{error}</p>}
         </div>
-    );
+        </div>
+        </section>
+
+    )
 };
 
 export default Chat;
-

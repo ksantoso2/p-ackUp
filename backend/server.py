@@ -4,6 +4,7 @@ from flask_cors import CORS     #pip install flask-cors
 from google import genai        #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
+from formatHelper import *
 
 app = Flask(__name__)
 load_dotenv()
@@ -11,15 +12,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 #variable name is "sensitive" DO NOT CHANGE (need _ ?)
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
-
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-
-#variable name is "sensitive"? DO NOT CHANGE
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
-
 
 CORS(app)
 
@@ -58,6 +50,9 @@ def gemini():
     return jsonify({"response": response.text}), 200
 
 
+
+
+
 @app.route("/users", methods=["GET"])
 def get_users():
     get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
@@ -73,6 +68,39 @@ def create_user():
     users.insert_one({"username": username, "age": age})
 
     return jsonify({"message": "User created!", "username": username, "age": age})
+
+
+@app.route("/itineraries", methods=["POST"])
+def create_itinerary():
+   data = request.get_json()
+   try:
+       user_data = data.get("user")
+       user = User.objects(name=user_data["name"]).first()
+       if not user:
+           user = User(name=user_data["name"], age=user_data["age"])
+           user.save()
+
+
+       stop_refs = []
+       for stop_data in data.get("itineraryStops", []):
+           stop = ItineraryStop(**stop_data)
+           stop.save()
+           stop_refs.append(stop)
+
+
+       trip = Trip(
+           name=data["name"],
+           user=[user],
+           itineraryStop=stop_refs
+       )
+       trip.save()
+
+       return jsonify({"message": "Trip created", "trip_id": str(trip.id)}), 201
+
+   except ValidationError as ve:
+       return jsonify({"error": str(ve)}), 400
+   except Exception as e:
+       return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
