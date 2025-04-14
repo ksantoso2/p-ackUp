@@ -85,9 +85,10 @@ const Chat = () => {
                         <button onClick={() => setHistory([])}>New chat</button>
                     </div>
                 </div>
-
                 {error && <p className="error">{error}</p>}
         </div>
+        </div>
+        </section>
     );
 };
 
