@@ -9,22 +9,37 @@ from google.genai.types import GenerateContentConfig, HttpOptions
 
 app = Flask(__name__)
 load_dotenv()
-GEMINI_API_KEY = os.getenv("S_GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 
 #variable name is "sensitive"? DO NOT CHANGE 
 gemini_client = genai.Client(api_key="AIzaSyBC4Tie2msLbVKtIdkXXr_P1sf1FX9gXIs")    #UPDATE API KEY FOR OTHER USERS
+#variable name is "sensitive" DO NOT CHANGE (need _ ?)
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
+
+
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+
+#variable name is "sensitive"? DO NOT CHANGE
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
+
 
 CORS(app)
+
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["packup"]
 users = db["users"]
 
+
 # Example route
 @app.route("/members")
 def members():
-    return {"members": ["Member1", "Member2", "Member3"]}
-  
+    return {"members": ["Member1", "Member2", "Member3, Member4, Member5, Member6, Member7"]}
+
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
     users.delete_one({"username": username})
@@ -62,14 +77,16 @@ def gemini():
         - Follow the Motion Picture Association film rating system age guidelines to give age-appropriate movie and show based 
         suggestions to the user.
         - When possible, highlight small/family owned businesses instead of focusing all on popular touristy spots. 
-
         """
     ]
+
+
     response = gemini_client.models.generate_content(
         model="gemini-2.0-flash",
         contents = user_input,
         config=GenerateContentConfig(system_instruction=system_instructions)
     )
+    
     print("Response from Gemini:", response.text) 
     return jsonify({"response": response.text}), 200
 
