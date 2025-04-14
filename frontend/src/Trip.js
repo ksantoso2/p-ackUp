@@ -1,13 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Trip.css';
 
 const Trip = () => {
-    const [tripName, setTripName] = useState('My Awesome Trip');
-  
-    return (
+  const [tripName, setTripName] = useState('My Awesome Trip');
+
+  useEffect(() => {
+    // Load Google Maps script
+    const loadScript = () => {
+      if (window.google) {
+        initMap();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY`;
+      script.async = true;
+      script.defer = true;
+      script.onload = initMap;
+      document.head.appendChild(script);
+    };
+
+    const initMap = () => {
+      const map = new window.google.maps.Map(document.getElementById('map'), {
+        center: { lat: 41.3851, lng: 2.1734 }, // Barcelona coords
+        zoom: 12,
+      });
+
+      new window.google.maps.Marker({
+        position: { lat: 41.3851, lng: 2.1734 },
+        map,
+        title: 'Barcelona',
+      });
+    };
+
+    loadScript();
+  }, []);
+
+  return (
     <div>
       <header className="trip-header">
-        <h1>Barcelona, Spain</h1> {/* Need to call from database **/}
+        <h1>Barcelona, Spain</h1>
         <div className="nav-buttons">
           <button>Trips</button>
           <button>Plan</button>
@@ -16,17 +48,11 @@ const Trip = () => {
 
       <main className="trip-main">
         <section className="itinerary">
-          <h2>Itinerary: Saturday, July 17</h2> {/* Need to call from database */}
+          <h2>Itinerary: Saturday, July 17</h2>
           <div className="itinerary-list">
-            {/* {itinerary.map((item, index) => (
-              <div key={index} className="itinerary-item">
-                <div className="time">{item.start_time} – {item.end_time}</div>
-                <div className="activity">{item.activity}</div>
-              </div>
-            ))} */}
+            {/* Itinerary items */}
           </div>
           <button className="edit-btn">Edit</button>
-          {/* <button onClick={downloadCSV} className="csv-btn">.csv file</button> */}
         </section>
 
         <section className="map">
@@ -34,7 +60,7 @@ const Trip = () => {
         </section>
       </main>
     </div>
-    );
-  };
-  
-  export default Trip;
+  );
+};
+
+export default Trip;
