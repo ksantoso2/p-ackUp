@@ -88,6 +88,8 @@ const Chat = () => {
 
                 {error && <p className="error">{error}</p>}
         </div>
+        </div>
+        </section>
     );
 };
 
