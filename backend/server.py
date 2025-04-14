@@ -95,6 +95,20 @@ def get_users():
     get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
     return jsonify(list(get_users)), 200
 
+
+#GET request to get one user
+@app.route("/users/<username>", methods=["GET"])
+def get_user(username):
+    user = users.find_one({"username": username})
+
+    if user:
+        return jsonify({
+            "username": user.get("username"),
+            "age": user.get("age")
+        }), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+
   
 @app.route("/users", methods=["POST"])
 def create_user():
@@ -110,3 +124,4 @@ def create_user():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
