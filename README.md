@@ -34,3 +34,9 @@ npm start
 ```
 
 View the website on http://localhost:3000/ 
+
+## Adding .env file
+
+Right-click the backend folder and create a new file called '.env'
+
+Add the following and replace YOUR_KEY with your API key: GEMINI_API_KEY = YOUR_KEY 

@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Kadwa:wght@400;700&display=swap');
+
+h1 {
+  font-family: 'Kadwa', sans-serif;
+  font-weight: 100;
+  font-size: 64px;
+}
+
+h2 {
+    font-family: 'Kadwa', sans-serif;
+    font-weight: 100;
+    font-size: 48px;
+  }
+
+h3 {
+    font-family: 'Kadwa', sans-serif;
+    font-weight: 100;
+    font-size: 25px; 
+    /* test size */
+  }
+
+/* reference conor and ellie's css file to match */
