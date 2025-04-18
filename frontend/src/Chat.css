@@ -1,103 +1,159 @@
-.main {
-    display: flex;
+.chat-page {
+    background-color: #FEFAF6;
     height: 100vh;
-}
-
-h1 {
-    text-align: top left;
-    flex-direction: left;
-}
-
-.chat-container {
     display: flex;
     flex-direction: column;
-    align-items: bottom;
-    justify-content: bottom;
+    align-items: center;
+    justify-content: start;
+    padding-top: 40px;
+    font-family: 'Work Sans', sans-serif;
+    position: relative;
+}
+
+.navbar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.navbar button {
+    background: #EBE7E3;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    color: #3A3A3A;
+    font-family: 'Work Sans', sans-serif;
+}
+
+.navbar .active {
+    background-color: #7D8B97;
+    color: white;
+}
+
+.main-content h1 {
+    font-size: 36px;
+    font-family: 'Inika', serif;
+    color: #3A3A3A;
+    margin-bottom: 20px;
+}
+
+.input-wrapper {
+    background: #EBE7E3;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+    padding: 30px 24px;
+    width: 600px;
+    position: relative;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
+}
+
+.input-wrapper.at-bottom {
+    position: fixed;
+    top: auto;
+    bottom: 30px;
+}
+
+.sloth-img {
+    position: absolute;
+    top: -50px;
+    right: 10px;
+    width: 100px;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 24px;
+    font-family: 'Work Sans', sans-serif;
+    color: #7D8B97;
+}
+
+.input-wrapper input::placeholder {
+    color: #7D8B97;
+}
+
+
+.submit-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.submit-button:hover {
+    opacity: 0.7;
+}
+
+.submit-icon {
     width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
-.sidebar .history {
+
+.chat-history {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 20px;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
-.history .you {
-    display: block;
+.chat-message {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #C6D4BA;
+    padding: 10px 16px;
+    border-radius: 18px;
+    max-width: 80%;
+    font-family: 'Work Sans', sans-serif;
     text-align: right;
-    margin-left: auto;
+    margin-right: 20px;
 }
 
-.history .bot {
-    display: block;
-    text-align: left;
-    margin-right: auto;
+.bot-message {
+    align-self: flex-start;
+    background-color: transparent;
+    padding: 0;
+    font-family: 'Work Sans', sans-serif;
+    max-width: 80%;
+    margin-left: 20px;
 }
 
-.bottom-section {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-/* .input-container {
-    display: flex;
-    flex-direction: column;
-    align-items: bottom right;
-    justify-content: bottom;
-    width: 100%;
-    background-color: green;
-} */
-
-.textbox {
-    display:flex;
-    flex-direction: column;
-    align-items: bottom right;
-    justify-content: bottom;
-    height: 100px;
-    width: 100%;
-  
-}
-
-.textbox input {
-    width: 100%;
-    height: 100%;
-}
-
-.new-chat button{
-    height: 50px;
-    width: 50px;
-}
-
-.submit {
-    position:relative;
-    height: 100vh;
+.tree-img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .error {
-    text-align: center;
-
-}
-
-.column {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    text-align: center
-}
-.left {
-    flex: 1;
-    height: 100%;
-    align-self: flex-start;
-    border-right: 2px solid #ccc;
-} 
-  
-.right {
-flex: 3;
-height: 100%;
-align-self: flex-end;
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
+    color: #863428;
+    margin-top: 10px;
+    font-size: 18px;
 }
