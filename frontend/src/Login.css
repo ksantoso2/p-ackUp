@@ -28,6 +28,16 @@ h3 {
   font-family: 'Kadwa', sans-serif;
 }
 
+.login-button {
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  background-color: #A3CFDD;
+  font-size: 1em;
+  cursor: pointer;
+  color: #000;
+}
+
 .palmtree-image {
   position: fixed;
   left: 0;
