@@ -4,10 +4,13 @@ from pydantic import BaseModel
 from typing import List, get_type_hints
 import re
 from pydantic import BaseModel
-from typing import List
+from typing import Optional, List
 from pydantic import ValidationError
 import os
-from server import *
+from datetime import datetime
+from datetime import date
+
+
 
 def extract_json(text_response):
     # This pattern matches a string that starts with '{' and ends with '}'
@@ -88,8 +91,21 @@ def validate_json_with_model(model_class, json_data):
 # Define your Pydantic model
 class TitlesModel(BaseModel):
     # Define your fields here, for example:
-    name: str
-    city: str
+    # name: str
+    # city: str
+    # Define your fields here, for example:
+    placeName: str
+    latitude:  Optional[float] = None
+    longitude:  Optional[float] = None
+    address: Optional[str] = None
+    media: Optional[List[str]] = None
+    openingHours: Optional[str] = None
+    city:  Optional[str] = None
+    country:  Optional[str] = None
+    date: Optional[datetime]  = None                     #Optional[datetime]  = None
+    timeOfVisit:  Optional[str] = None
+    duration:  Optional[str] = None
+    notes:  Optional[str] = None
 
 
 def responseFormat(response):
@@ -99,9 +115,8 @@ def responseFormat(response):
     base_prompt = f"{topic}: Based on the user's plan  {user_choice},"
 
     optimized_prompt = base_prompt + (
-        " Return the response as JSON in the following format: "
-        '{"trip": [{"name": "Café Central", "city": "Vienna"}]}'
-    )
+        '. Please provide a response in a structured JSON format that matches the following model: '
+        '{ "placeName": "Some Name", ["latitude": "latitude of place", "longitude": "longitude of place", "address": "address of place", "city": "city of place","country": "country of place", "timeOfVisit": "time to visit the place","duration": "duration of visit at place","notes": "notes about place"]}')
 
 
     # Generate content using the modified prompt
