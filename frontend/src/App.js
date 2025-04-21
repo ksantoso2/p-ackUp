@@ -1,3 +1,4 @@
+import Login from './Login';
 import Signup from './welcome/Signup';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import React from 'react';
@@ -8,6 +9,8 @@ function App() {
     <Router>
       <Routes>
         <Route path="/chat" element={<Chat />} />
+        <Route path="/signup" element={<Signup /> } />
+        <Route path="/login" element={<Login />} /> {/* Login Page */}
       </Routes>
     </Router>
   );
@@ -15,3 +18,5 @@ function App() {
 
 
 export default App;
+
+
