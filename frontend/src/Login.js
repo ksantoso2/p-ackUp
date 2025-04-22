@@ -1,5 +1,5 @@
 import React, {useState} from 'react' //to store and update data
-import { useNavigate } from 'react-router-dom' // move to next stage
+import { useNavigate, Link } from 'react-router-dom' // move to next stage
 import "./Login.css" // css file
 
 
@@ -28,6 +28,7 @@ const Login = () => {
 
     // return portion referenced from Connor and Ellie's signup.js for styling/consistency
     return (
+        <div className="login-container">
         <div>
         <div style = {{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", height:"100vh"}}>
             <div style={{textAlign:"center"}}>
@@ -39,11 +40,11 @@ const Login = () => {
             </h2>
             <h3>
                 Don't have an account?{" "} 
-                {/* 
-                <Link to="/signup" style={{color: "blue"}}>
+                { 
+                <Link to="/signup" className="signup-link">
                     Sign up!
                 </Link> 
-                */}
+                }
             </h3>
             </div>
             
@@ -58,12 +59,15 @@ const Login = () => {
             
             <button 
             onClick={() => checkUsernameExist(username)}
-            style = {{padding:"10px 20px", borderRadius:"50px", border:"none"}}
+            className = "login-button"
             >
             Login
             </button>
+            <img src="/palmtree.png" className="palmtree-image" alt="Tree" />
+            <img src="/sloth.png" className="sloth-image" alt="Sloth" />
 
         
+        </div>
         </div>
         </div>
         );
