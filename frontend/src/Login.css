@@ -4,29 +4,31 @@ h1 {
   font-family: 'Kadwa', sans-serif;
   font-weight: 100;
   font-size: 64px;
-  color: #3A3A3A
+  color: #3A3A3A 
 }
 
 h2 {
     font-family: 'Kadwa', sans-serif;
     font-weight: 100;
     font-size: 48px;
-    color: #3A3A3A
+    color: #3A3A3A 
   }
 
-  h3 {
+h3 {
     font-family: 'Kadwa', sans-serif;
     font-weight: 100;
     font-size: 20px; 
     color: #3A3A3A 
   }
 
-.signup-container {
+/* reference conor and ellie's css file to match */
+
+.login-container {
   background-color: #FEFAF6;              
   font-family: 'Kadwa', sans-serif;
 }
 
-.signup-button {
+.login-button {
   padding: 10px 20px;
   border-radius: 50px;
   border: none;
@@ -37,7 +39,7 @@ h2 {
 }
 
 .palmtree-image {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 0;
   height: 90%;
@@ -45,14 +47,14 @@ h2 {
 }
 
 .sloth-image {
-  position: absolute;
+  position: fixed;
   right: 0px;
   bottom: 0;
   height: 30%;
   z-index: 0;
 }
 
-.login-link {
+.signup-link {
   color: #A3CFDD;
   font-weight: bold;
   text-decoration: underline;

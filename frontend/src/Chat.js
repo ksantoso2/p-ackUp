@@ -9,25 +9,25 @@ const Chat = () => {
     const [error, setError] = useState(null);
     const [history, setHistory] = useState([]);
 
-    const handleAPI = async () => {
-        if (!user_input.trim()) {
-            setError("Input cannot be empty.");
-            return;
-        }
+  const handleAPI = async () => {
+    if (!user_input.trim()) {
+      setError("Input cannot be empty.");
+      return;
+    }
 
-        setLoading(true);
-        setError(null);
+    setLoading(true);
+    setError(null);
 
-        try {
-            const res = await fetch('http://127.0.0.1:5000/gemini', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user_input }),
-            });
+    try {
+      const res = await fetch("http://127.0.0.1:5000/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_input }),
+      });
 
-            if (!res.ok) {
-                throw new Error(`HTTP error! Status: ${res.status}`);
-            }
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
 
             const data = await res.json();
             set_response(data.response);
@@ -122,6 +122,7 @@ const Chat = () => {
             </div>
         </section>
     );
+
 };
 
 export default Chat;
