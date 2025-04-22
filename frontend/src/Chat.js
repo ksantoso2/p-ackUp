@@ -89,9 +89,9 @@ const Chat = () => {
 
           {error && <p className="error">{error}</p>}
         </div>
-      </div>
-    </section>
-  );
+        </div>
+        </section>
+    );
 };
 
 export default Chat;
