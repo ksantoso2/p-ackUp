@@ -6,6 +6,7 @@ from dotenv import load_dotenv  # pip install python-dotenv
 import os
 from formatHelper import TripItineraryModel
 import json
+from google.genai.types import GenerateContentConfig, HttpOptions
 
 app = Flask(__name__)
 load_dotenv()
