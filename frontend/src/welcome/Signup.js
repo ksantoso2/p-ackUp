@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import "./Signup.css"
 
 const Signup = () => {
@@ -27,7 +27,7 @@ const Signup = () => {
 
 
   return (
-  <div>
+    <div className="signup-container">
     <div style = {{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", height:"100vh"}}>
       <div style={{textAlign:"center"}}>
       <h1 style={{marginBottom: "10px"}}>
@@ -36,6 +36,14 @@ const Signup = () => {
       <h2 style={{marginTop: "10px"}}>
         Let's start exploring...
       </h2>
+      <h3>
+                Have an account?{" "} 
+                { 
+                <Link to="/login" className="login-link">
+                    Login!
+                </Link> 
+                }
+            </h3>
       </div>
       <input 
         type="text" 
@@ -53,11 +61,12 @@ const Signup = () => {
       />
       <button 
         onClick={handleUser}
-        style = {{padding:"10px 20px", borderRadius:"50px", border:"none"}}
+        className = "signup-button"
       >
-        Create User
+        Sign up
       </button>
-      <p>{message}</p>
+      <img src="/palmtree.png" className="palmtree-image" alt="Tree" />
+      <img src="/sloth.png" className="sloth-image" alt="Sloth" />
     </div>
     </div>
   );
