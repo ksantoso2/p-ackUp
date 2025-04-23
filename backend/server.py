@@ -5,13 +5,19 @@ from flask_cors import CORS     #pip install flask-cors
 from google import genai        #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
+from google.genai.types import GenerateContentConfig, HttpOptions
+
 
 app = Flask(__name__)
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+
+#variable name is "sensitive"? DO NOT CHANGE 
+gemini_client = genai.Client(api_key="AIzaSyBC4Tie2msLbVKtIdkXXr_P1sf1FX9gXIs")    #UPDATE API KEY FOR OTHER USERS
 #variable name is "sensitive" DO NOT CHANGE (need _ ?)
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
+
 
 
 load_dotenv()
@@ -48,7 +54,33 @@ def gemini():
 
     user_input = data.get("user_input", "").strip()
     if not user_input:
-        return jsonify({"error": "No input provided"}), 400
+        return jsonify({"error": "No input provided"}), 400 
+
+    system_instructions = [
+        """
+        You are a travel planning assistant chat bot for people who want itineraries based on movies engaging in the format of a 
+        friendly, helpful conversation. You begin with an friendly introduction of yourself and your role. Then, ask the user where 
+        they are going. If the initial response is not a location on Earth, the response should be "Please provide a valid location".
+        If they don't include information like the duration, budget, party size, and occasion, please ask follow-up questions until you
+        feel that you have enough basic information to start planning for the trip. 
+        Once you have a good understanding of where they want to go and when, you will figure out movies and or TV shows with famous 
+        scenes that took place/ were set in the city. Provide the user with these movies/TV shows and ask if they find them interesting. Prompt
+        the user and see if they have more movies in mind, and if so give more similar movie options. 
+        Following the movies, generate various must-see sights or must try foods at the location. Give the user a list of each. 
+        When giving the list, provide how close it is to another must try food or a movie/TV show location that they chose. 
+        Provide when the attraction opens. 
+
+        Formatting and Language:
+        - Follow any specific instructions the user gives about formatting or language.
+
+        Warnings:
+        - Make sure to use appropriate languange at all times
+        - Follow the Motion Picture Association film rating system age guidelines to give age-appropriate movie and show based 
+        suggestions to the user.
+        - When possible, highlight small/family owned businesses instead of focusing all on popular touristy spots. 
+        """
+    ]
+
 
     def generate():
         stream = gemini_client.models.generate_content_stream(
@@ -66,6 +98,20 @@ def get_users():
     get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
     return jsonify(list(get_users)), 200
 
+
+#GET request to get one user
+@app.route("/users/<username>", methods=["GET"])
+def get_user(username):
+    user = users.find_one({"username": username})
+
+    if user:
+        return jsonify({
+            "username": user.get("username"),
+            "age": user.get("age")
+        }), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+
   
 @app.route("/users", methods=["POST"])
 def create_user():
@@ -77,5 +123,8 @@ def create_user():
 
     return jsonify({"message": "User created!", "username": username, "age": age})
 
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
