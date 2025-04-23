@@ -11,8 +11,10 @@ const Chat = () => {
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
   const [atBottom, setAtBottom] = useState(false);
+  const [showTyping, setShowTyping] = useState(false);
 
   const handleAPI = async () => {
+    setShowTyping(true);
     if (!user_input.trim()) {
       setError("Input cannot be empty.");
       return;
@@ -20,6 +22,11 @@ const Chat = () => {
 
     setLoading(true);
     setError(null);
+
+    const newHistory = [...history, { question: user_input, answer: "" }];
+    setHistory(newHistory);
+    set_response("");
+    setAtBottom(true);
 
     try {
       const res = await fetch("http://127.0.0.1:5000/gemini", {
@@ -32,17 +39,53 @@ const Chat = () => {
         throw new Error(`HTTP error! Status: ${res.status}`);
       }
 
-      const data = await res.json();
-      set_response(data.response);
-      setHistory([...history, { question: user_input, answer: data.response }]);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+
+      let fullText = "";
+      let buffer = "";
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const json = JSON.parse(line.replace("data: ", ""));
+              fullText += json.text;
+              setShowTyping(false);
+              setHistory((prev) => {
+                const updated = [...prev];
+                const lastIndex = updated.length - 1;
+                updated[lastIndex] = {
+                  ...updated[lastIndex],
+                  answer: fullText
+                };
+                return updated;
+              });
+            } catch (err) {
+              console.error("Error parsing", err);
+            }
+          }
+        }
+      }
+
+      set_response(fullText);
       set_user_input("");
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setShowTyping(false);
+      setAtBottom(true);
     }
 
-    setAtBottom(true);
   };
 
   const handleKeyDown = (event) => {
@@ -75,6 +118,12 @@ const Chat = () => {
                       <div className="bot-message">{entry.answer}</div> 
                     </div>
                   ))}
+
+                  {showTyping && (
+                    <div className="chat-message">
+                      <div className="bot-message"> The Sloth is typing...</div>
+                    </div>
+                  )}
           </div>
 
         <div className={`input-wrapper ${atBottom ? "at-bottom" : ""}`}>
