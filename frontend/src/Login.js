@@ -18,6 +18,7 @@ const Login = () => {
         
         if (response.ok) {
             setMessage('Username exist!')
+            localStorage.setItem("username", inputUsername);
             navigate('/chat');
         } else {
             setMessage('Username not found!')

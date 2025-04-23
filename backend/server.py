@@ -81,7 +81,7 @@ def make_trip():
     try:
         # Get history from request
         history = request.get_json().get("history", [])
-
+        print("hist ", history)
         # Build Gemini prompt
         topic =  history
         base_prompt = f"Generate json of the trips activities off this chat: {topic}"

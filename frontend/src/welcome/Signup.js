@@ -22,6 +22,7 @@ const Signup = () => {
     }
 
     setMessage (`User Created!`); // success message
+    localStorage.setItem("username", username);
     navigate('/chat'); // redirect
   }
 

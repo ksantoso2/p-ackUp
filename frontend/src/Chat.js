@@ -8,6 +8,8 @@ const Chat = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [history, setHistory] = useState([]);
+    // localStorage.setItem("username", "sal");
+    const username = localStorage.getItem("username");
 
   const handleAPI = async () => {
     if (!user_input.trim()) {
@@ -31,7 +33,7 @@ const Chat = () => {
 
             const data = await res.json();
             set_response(data.response);
-            setHistory(prev => [...prev, { question: user_input, answer: data.response }]);
+            setHistory(prev => [...prev, { username, question: user_input, answer: data.response }]);
             set_user_input('');
         } catch (err) {
             setError(err.message);
@@ -47,6 +49,7 @@ const Chat = () => {
         }
         setLoading(true);
         setError(null);
+        
         try {
             const res = await fetch('http://127.0.0.1:5000/gemini/makeTrip', {
                 method: 'POST',
