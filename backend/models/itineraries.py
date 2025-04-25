@@ -27,17 +27,63 @@ class Trip(Document):
     name = StringField(required=True, max_length=100)
     user = ListField(ReferenceField(User))
     
-# Usage example
+# Usage example with multiple itinerary stops
 try:
-    user = User(name = "John Doe", age = 5)
+    user = User(name="John Doe", age=20)
     user.save()
-    
-    stop = ItineraryStop(placeName = "Museum", latitude = 0.0, longitude = 0.0, address = "17792 Maxine Lane", media = ["Lord of the rings", "Severance"],
-                         openingHours = "8:30 -10:30", city = "Paris", country = "France" , date = datetime.datetime(2025, 4,4), timeOfVisit = "10:00 AM" , duration = "4 hours", notes = "Super cool place")
-    
-    stop.save()
 
-    trip = Trip(itineraryStop = [stop], name = "Paris Trip", user = [user])
+    stop1 = ItineraryStop(
+        placeName="Louvre Museum",
+        latitude=48.8606,
+        longitude=2.3376,
+        address="Rue de Rivoli, 75001 Paris, France",
+        media=["Mona Lisa", "Da Vinci"],
+        openingHours="9:00 AM - 6:00 PM",
+        city="Paris",
+        country="France",
+        date=datetime.datetime(2025, 4, 4),
+        timeOfVisit="10:00 AM",
+        duration="2 hours",
+        notes="Start the day with art"
+    )
+    stop1.save()
+
+    stop2 = ItineraryStop(
+        placeName="Eiffel Tower",
+        latitude=48.8584,
+        longitude=2.2945,
+        address="Champ de Mars, 5 Avenue Anatole France, 75007 Paris, France",
+        openingHours="9:30 AM - 11:45 PM",
+        city="Paris",
+        country="France",
+        date=datetime.datetime(2025, 4, 4),
+        timeOfVisit="1:00 PM",
+        duration="1.5 hours",
+        notes="Walk up the tower!"
+    )
+    stop2.save()
+
+    stop3 = ItineraryStop(
+        placeName="Seine River Cruise",
+        latitude=48.8575,
+        longitude=2.3429,
+        address="Port de la Bourdonnais, 75007 Paris, France",
+        media=["Night cruise"],
+        openingHours="10:00 AM - 10:00 PM",
+        city="Paris",
+        country="France",
+        date=datetime.datetime(2025, 4, 4),
+        timeOfVisit="7:30 PM",
+        duration="1 hour",
+        notes ="Enjoy the ride!"
+    )
+    stop3.save()
+
+    trip = Trip(
+        itineraryStop=[stop1, stop2, stop3],
+        name="Paris Trip",
+        user=[user]
+    )
     trip.save()
 
 except Exception as e:
