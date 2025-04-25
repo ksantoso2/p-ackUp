@@ -6,17 +6,33 @@ import plantImg from './images/Group 43.png';
 
 
 //import { MoveDiagonal } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 
 const TripList = () => {
-      // 🌱 TODO: Replace with MongoDB data once backend is ready
-    const destinations = [
-        "Barcelona, Spain",
-        "Paris, France",
-        "Tokyo, Japan",
-        "New York, USA"
-    ];
+  const [trips, setTrips] = useState([]);
+  const navigate = useNavigate();
+  const { username } = useParams();
+
+  useEffect(() => {
+    // getting the itineraries from backend
+    const fetchTrips = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/${username}/get-itineraries`); 
+        const data = await response.json();
+        setTrips(data);
+      } catch (error) {
+        console.error('Error fetching trips:', error);
+      }
+    };
+
+    fetchTrips();
+  }, [username]);
+
+  const handleClick = (tripId) => {
+    navigate(`/trip/${username}/${tripId}`);
+  };
+
 
     return (
         <div className="trip-list-container">
@@ -34,17 +50,23 @@ const TripList = () => {
     
           {/* Cards */}
           <div className="destination-card-list">
-            {destinations.map((city, index) => (
-              <Link
-                key={index}
-                to={`/trip?location=${encodeURIComponent(city)}`}
-                className="destination-card"
-              >
-                <span className="destination-name">{city}</span>
-                <span className="destination-icon">↗</span>
-              </Link>
-            ))}
+            {Array.isArray(trips) ? (
+              trips.map((trip) => (
+                <div
+                  key={trip.id}
+                  className="destination-card"
+                  onClick={() => handleClick(trip.id)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <span className="destination-name">{trip.name}</span>
+                  <span className="destination-icon">↗</span>
+                </div>
+              ))
+            ) : (
+              <p>No trips found.</p>
+            )}
           </div>
+
         </div>
       );
     }

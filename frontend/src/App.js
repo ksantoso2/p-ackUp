@@ -6,7 +6,6 @@ import Chat from './Chat';
 import Trip from './Trip';
 import TripList from './TripList';
 
-
 function App() {
   return (
     <Router>
@@ -16,6 +15,9 @@ function App() {
         <Route path="/chat" element={<Chat />} />
         <Route path="/signup" element={<Signup /> } />
         <Route path="/login" element={<Login />} /> {/* Login Page */}
+        <Route path="/triplist/:username" element={<TripList />} /> 
+        {/*triplist and trip url have the username in them to fetch itinerary data to display on frontend*/}
+        <Route path="/trip/:username/:tripId" element={<Trip />} />
       </Routes>
     </Router>
   );
