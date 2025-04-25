@@ -1,103 +1,186 @@
-.main {
-    display: flex;
-    height: 100vh;
+.chat-page {
+   background-color: #FEFAF6;
+   height: 100vh;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: start;
+   padding-top: 40px;
+   font-family: 'Work Sans', sans-serif;
+   position: relative;
 }
 
-h1 {
-    text-align: top left;
-    flex-direction: left;
+
+.navbar {
+   display: flex;
+   gap: 1rem;
+   margin-bottom: 2rem;
 }
 
-.chat-container {
-    display: flex;
-    flex-direction: column;
-    align-items: bottom;
-    justify-content: bottom;
-    width: 100%;
+
+.nav-button {
+   background: #EBE7E3;
+   border: none;
+   padding: 10px 20px;
+   border-radius: 20px;
+   cursor: pointer;
+   font-size: 18px;
+   color: #3A3A3A;
+   font-family: 'Work Sans', sans-serif;
 }
 
-.sidebar .history {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    overflow-y: auto;
+.nav-button:hover{
+   opacity: .7;
 }
 
-.history .you {
-    display: block;
-    text-align: right;
-    margin-left: auto;
+
+.nav-button.active {
+   background-color: #7D8B97;
+   color: white;
 }
 
-.history .bot {
-    display: block;
-    text-align: left;
-    margin-right: auto;
+.nav-button.active:hover {
+   opacity: .7;
 }
 
-.bottom-section {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.main-content h1 {
+   font-size: 36px;
+   font-family: 'Inika', serif;
+   color: #3A3A3A;
+   margin-bottom: 20px;
 }
 
-/* .input-container {
-    display: flex;
-    flex-direction: column;
-    align-items: bottom right;
-    justify-content: bottom;
-    width: 100%;
-    background-color: green;
-} */
 
-.textbox {
-    display:flex;
-    flex-direction: column;
-    align-items: bottom right;
-    justify-content: bottom;
-    height: 100px;
-    width: 100%;
-  
+.input-wrapper {
+   background: #EBE7E3;
+   border-radius: 20px;
+   display: flex;
+   align-items: center;
+   margin-top: 30px;
+   padding: 30px 24px;
+   width: 600px;
+   position: relative;
+   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.05);
 }
 
-.textbox input {
-    width: 100%;
-    height: 100%;
+
+.input-wrapper.at-bottom {
+   position: fixed;
+   top: auto;
+   bottom: 30px;
 }
 
-.new-chat button{
-    height: 50px;
-    width: 50px;
+
+.sloth-img {
+   position: absolute;
+   top: -50px;
+   right: 10px;
+   width: 100px;
+   height: auto;
+   z-index: 2;
+   pointer-events: none;
 }
 
-.submit {
-    position:relative;
-    height: 100vh;
+
+.input-wrapper input {
+   flex: 1;
+   border: none;
+   background: transparent;
+   outline: none;
+   font-size: 24px;
+   font-family: 'Work Sans', sans-serif;
+   color: #7D8B97;
 }
+
+
+.input-wrapper input::placeholder {
+   color: #7D8B97;
+}
+
+
+
+
+.submit-button {
+   background: none;
+   border: none;
+   padding: 0;
+   cursor: pointer;
+   width: 48px;
+   height: 48px;
+   border-radius: 50%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   transition: transform 0.2s ease;
+}
+
+
+.submit-button:hover {
+   opacity: 0.7;
+}
+
+
+.submit-icon {
+   width: 100%;
+   height: 100%;
+   object-fit: contain;
+}
+
+
+
+
+.chat-history {
+   display: flex;
+   flex-direction: column;
+   justify-content: flex-start;
+   gap: 16px;
+   padding: 20px;
+   max-height: 60vh;
+   overflow-y: auto;
+}
+
+
+.chat-message {
+   display: flex;
+   flex-direction: column;
+}
+
+
+.user-message {
+   align-self: flex-end;
+   background-color: #C6D4BA;
+   padding: 10px 16px;
+   border-radius: 18px;
+   max-width: 80%;
+   font-family: 'Work Sans', sans-serif;
+   text-align: right;
+   margin-right: 20px;
+}
+
+
+.bot-message {
+   align-self: flex-start;
+   background-color: transparent;
+   padding: 0;
+   font-family: 'Work Sans', sans-serif;
+   max-width: 80%;
+   margin-left: 20px;
+}
+
+
+.tree-img {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: auto;
+   height: auto;
+   z-index: 0;
+   pointer-events: none;
+}
+
 
 .error {
-    text-align: center;
-
-}
-
-.column {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    text-align: center
-}
-.left {
-    flex: 1;
-    height: 100%;
-    align-self: flex-start;
-    border-right: 2px solid #ccc;
-} 
-  
-.right {
-flex: 3;
-height: 100%;
-align-self: flex-end;
-display: flex;
-flex-direction: column;
-justify-content: flex-end;
+   color: #863428;
+   margin-top: 10px;
+   font-size: 18px;
 }

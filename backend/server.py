@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_cors import CORS     #pip install flask-cors
 from google import genai        #pip install google-genai
+from google.genai.types import GenerateContentConfig, HttpOptions
 from dotenv import load_dotenv  # pip install python-dotenv
 from models.itineraries import User, ItineraryStop, Trip
 import os
@@ -11,14 +12,6 @@ load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 #variable name is "sensitive" DO NOT CHANGE (need _ ?)
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
-
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-
-#variable name is "sensitive"? DO NOT CHANGE
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 
@@ -50,9 +43,9 @@ def gemini():
 
     user_input = data.get("user_input", "").strip()
     if not user_input:
-        return jsonify({"error": "No input provided"}), 400
+        return jsonify({"error": "No input provided"}), 400 # change to 200 or 400 if no CORS error
 
-    response = gemini_client.models.generate_content(
+    response=gemini_client.models.generate_content(
     model="gemini-2.0-flash",
     contents = user_input,
     config=GenerateContentConfig(
