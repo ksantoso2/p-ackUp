@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './Trip.css';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Trip = () => {
   const { username, tripId } = useParams();
   const [trip, setTrip] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -66,8 +67,10 @@ const Trip = () => {
       <header className="trip-header">
         <h1>{trip.name}</h1>
         <div className="nav-buttons">
-          <button>Trips</button>
-          <button>Plan</button>
+        <button onClick={() => navigate(`/triplist/${username}`)}>Trips</button> 
+        {/* Trip button navigates back to url with user (instead of just /triplist) so their trip data is there*/}
+        <button onClick={() => navigate(`/chat/`)}>Plan</button> 
+        {/* Chat button navigates to general chat page*/}
         </div>
       </header>
 
