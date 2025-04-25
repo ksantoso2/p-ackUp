@@ -146,7 +146,7 @@ def get_user_itineraries(username):
                 "openingHours": stop.openingHours,
                 "city": stop.city,
                 "country": stop.country,
-                "date": stop.date.isoformat() if stop.date else None,
+                "date": stop.date.isoformat(),
                 "timeOfVisit": stop.timeOfVisit,
                 "duration": stop.duration,
                 "notes": stop.notes
@@ -159,10 +159,10 @@ def get_user_itineraries(username):
 @app.route("/get-itineraries/<username>/<trip_id>", methods=["GET"])
 def get_specific_itinerary(username, trip_id):
     user = User.objects(name=username).first()
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
     trip = Trip.objects(id=trip_id, user=user).first()
-    if not trip:
+    if trip is None:
         return jsonify({'error': 'Trip not found'}), 404
     stops = []
     for stop in trip.itineraryStop:
@@ -176,7 +176,7 @@ def get_specific_itinerary(username, trip_id):
             'openingHours': stop.openingHours,
             'city': stop.city,
             'country': stop.country,
-            'date': stop.date.isoformat() if stop.date else None,
+            'date': stop.date.isoformat(),
             'timeOfVisit': stop.timeOfVisit,
             'duration': stop.duration,
             'notes': stop.notes
