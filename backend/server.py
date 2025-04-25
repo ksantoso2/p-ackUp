@@ -6,6 +6,8 @@ from google.genai.types import GenerateContentConfig, HttpOptions
 from dotenv import load_dotenv  # pip install python-dotenv
 from models.itineraries import User, ItineraryStop, Trip
 import os
+from google.genai.types import GenerateContentConfig, HttpOptions
+
 
 app = Flask(__name__)
 load_dotenv()
@@ -28,7 +30,7 @@ response = ""
 # Example route
 @app.route("/members")
 def members():
-    return {"members": ["Member1", "Member2", "Member3"]}
+    return {"members": ["Member1", "Member2", "Member3, Member4, Member5, Member6, Member7"]}
 
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
@@ -43,14 +45,11 @@ def gemini():
 
     user_input = data.get("user_input", "").strip()
     if not user_input:
+        return jsonify({"error": "No input provided"}), 400 
         return jsonify({"error": "No input provided"}), 400 # change to 200 or 400 if no CORS error
 
-    response=gemini_client.models.generate_content(
-    model="gemini-2.0-flash",
-    contents = user_input,
-    config=GenerateContentConfig(
-        system_instruction=[
-                    """
+    system_instructions = [
+        """
         You are a travel planning assistant chat bot for people who want itineraries based on movies engaging in the format of a 
         friendly, helpful conversation. You begin with an friendly introduction of yourself and your role. Then, ask the user where 
         they are going. If the initial response is not a location on Earth, the response should be "Please provide a valid location".
@@ -70,22 +69,38 @@ def gemini():
         - Make sure to use appropriate languange at all times
         - Follow the Motion Picture Association film rating system age guidelines to give age-appropriate movie and show based 
         suggestions to the user.
-        - Make sure to give appropriate location suggestions based on the user's age (e.g. no bars for those who aren't drinking age in 
-        the location)
         - When possible, highlight small/family owned businesses instead of focusing all on popular touristy spots. 
         """
-        ]
-    )
+    ]
+
+
+    response = gemini_client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents = user_input,
+        config=GenerateContentConfig(system_instruction=system_instructions)
     )
     
     print("Response from Gemini:", response.text) 
     return jsonify({"response": response.text}), 200
 
-
 @app.route("/users", methods=["GET"])
 def get_users():
     get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
     return jsonify(list(get_users)), 200
+
+
+#GET request to get one user
+@app.route("/users/<username>", methods=["GET"])
+def get_user(username):
+    user = users.find_one({"username": username})
+
+    if user:
+        return jsonify({
+            "username": user.get("username"),
+            "age": user.get("age")
+        }), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
   
 @app.route("/users", methods=["POST"])
@@ -99,37 +114,7 @@ def create_user():
     return jsonify({"message": "User created!", "username": username, "age": age})
 
 
-@app.route("/itineraries", methods=["POST"])
-def create_itinerary():
-    data = request.get_json()
-
-    try:
-
-        user_data = data.get("user")
-        user = User.objects(name=user_data["name"]).first()
-        if not user:
-            user = User(name=user_data["name"], age=user_data["age"])
-            user.save()
-
-        stop_refs = []
-        for stop_data in data.get("itineraryStop", []):
-            stop = ItineraryStop(**stop_data)
-            stop.save()
-            stop_refs.append(stop)
-
-        trip = Trip(
-            name=data["name"],
-            user=[user],
-            itineraryStop=stop_refs
-        )
-        trip.save()
-
-        return jsonify({"message": "Trip created", "trip_id": str(trip.id)}), 201
-
-    except ValidationError as ve:
-        return jsonify({"error": str(ve)}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
+

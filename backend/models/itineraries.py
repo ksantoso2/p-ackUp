@@ -21,32 +21,24 @@ class ItineraryStop(Document):
     timeOfVisit = StringField(required=True)
     duration = StringField(required=True)
     notes = StringField(required=True)
-
+    
 class Trip(Document):
     itineraryStop = ListField(ReferenceField(ItineraryStop))
     name = StringField(required=True, max_length=100)
     user = ListField(ReferenceField(User))
-
+    
 # Usage example
-""" try:
-        user_data = data.get("user")
-        user = User.objects(name=user_data["name"]).first()
-        if not user:
-            user = User(name=user_data["name"], age=user_data["age"])
-            user.save()
+try:
+    user = User(name = "John Doe", age = 5)
+    user.save()
+    
+    stop = ItineraryStop(placeName = "Museum", latitude = 0.0, longitude = 0.0, address = "17792 Maxine Lane", media = ["Lord of the rings", "Severance"],
+                         openingHours = "8:30 -10:30", city = "Paris", country = "France" , date = datetime.datetime(2025, 4,4), timeOfVisit = "10:00 AM" , duration = "4 hours", notes = "Super cool place")
+    
+    stop.save()
 
-        stop_refs = []
-        for stop_data in data.get("itineraryStops", []):
-            stop = ItineraryStop(**stop_data)
-            stop.save()
-            stop_refs.append(stop)
-
-        trip = Trip(
-            name=data["name"],
-            user=[user],
-            itineraryStop=stop_refs
-        )
-        trip.save()
+    trip = Trip(itineraryStop = [stop], name = "Paris Trip", user = [user])
+    trip.save()
 
 except Exception as e:
-    print(f"Error: {e}")  # ValidationError: "age" cannot be negative """
+    print(f"Error: {e}")  # ValidationError: "age" cannot be negative
