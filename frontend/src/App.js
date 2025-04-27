@@ -5,15 +5,13 @@ import React from 'react';
 import Chat from './Chat';
 import Trip from './Trip';
 import TripList from './TripList';
+import Navbar from './Navbar';
 
 
 function App() {
   return (
     <Router>
-      <nav>
-        <Link to="/trips">Trips</Link> |
-        <Link to="/plan">Plan</Link>
-      </nav>
+      <Navbar/>
       <Routes>
         <Route path="/Trip" element={<Trip />} />
         <Route path="/TripList" element={<TripList />} />

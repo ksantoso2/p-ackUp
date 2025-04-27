@@ -36,3 +36,35 @@
     transform: rotate(360deg);
   }
 }
+
+/* .navbar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+
+.nav-button {
+  background: #EBE7E3;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #3A3A3A;
+  font-family: 'Work Sans', sans-serif;
+}
+
+.nav-button:hover{
+  opacity: .7;
+}
+
+
+.nav-button.active {
+  background-color: #7D8B97;
+  color: white;
+}
+
+.nav-button.active:hover {
+  opacity: .7;
+} */

@@ -3,6 +3,8 @@ import "./Chat.css";
 import slothImg from '../src/assets/sloth.svg';
 import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
+import TripList from './TripList';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
 const Chat = () => {
  const [user_input, set_user_input] = useState("");
@@ -62,19 +64,21 @@ const Chat = () => {
 
  return (
    <div className="chat-page">
-       <header className="navbar">
+       {/* <header className="navbar">
 
-
-           <button className={`nav-button ${activeTab === "Trips" ? "active" : ""}`}
-           onClick={() => setActiveTab("Trips")}>
-            Trips
-          </button>
-           <button className={`nav-button ${activeTab === "Plan" ? "active" : ""}`}
-           onClick={() => setActiveTab("Plan")}>
-            Plan
-          </button>
-          
-       </header>
+          <Link to="/TripList">
+            <button className={`nav-button ${activeTab === "Trips" ? "active" : ""}`}
+            onClick={() => setActiveTab("Trips")}>
+              Trips
+            </button>
+          </Link>
+          <Link to="/Chat">
+            <button className={`nav-button ${activeTab === "Plan" ? "active" : ""}`}
+            onClick={() => setActiveTab("Plan")}>
+              Plan
+            </button>
+          </Link>
+       </header> */}
 
 
        {history.length === 0 && (

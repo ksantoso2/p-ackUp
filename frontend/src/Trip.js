@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Trip.css';
+import TripList from './TripList';
+import Chat from './Chat';
+import {Link} from "react-router-dom"
 
 const Trip = () => {
   const [tripName, setTripName] = useState('My Awesome Trip');
@@ -41,8 +44,13 @@ const Trip = () => {
       <header className="trip-header">
         <h1>Barcelona, Spain</h1>
         <div className="nav-buttons">
+        <Link to="/TripList">
           <button>Trips</button>
-          <button>Plan</button>
+        </Link>
+        <Link to="/Chat">
+            <button>Plan</button>
+        </Link>
+          
         </div>
       </header>
 
