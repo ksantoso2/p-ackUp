@@ -1,6 +1,6 @@
 import Login from './Login';
 import Signup from './welcome/Signup';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import React from 'react';
 import Chat from './Chat';
 import Trip from './Trip';
@@ -23,13 +23,6 @@ function App() {
   );
 }
 
-function Trips() {
-  // return trips page ;
-}
-
-function Plan() {
-  // return plan page ;
-}
 
 export default App;
 

@@ -3,8 +3,6 @@ import "./Chat.css";
 import slothImg from '../src/assets/sloth.svg';
 import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
-import TripList from './TripList';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
 const Chat = () => {
  const [user_input, set_user_input] = useState("");
@@ -13,7 +11,7 @@ const Chat = () => {
  const [error, setError] = useState(null);
  const [history, setHistory] = useState([]);
  const [atBottom, setAtBottom] = useState(false);
- const [activeTab, setActiveTab] = useState("Plan");
+//  const [activeTab, setActiveTab] = useState("Plan");
 
 
  const handleAPI = async () => {
