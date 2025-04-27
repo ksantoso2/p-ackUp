@@ -1,4 +1,5 @@
-from flask import Flask, request, jsonify
+import json
+from flask import Flask, request, jsonify, Response
 from pymongo import MongoClient
 from flask_cors import CORS     #pip install flask-cors
 from google import genai        #pip install google-genai
@@ -67,14 +68,17 @@ def gemini():
     ]
 
 
-    response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents = user_input,
-        config=GenerateContentConfig(system_instruction=system_instructions)
-    )
-    
-    # print("Response from Gemini:", response.text) 
-    return jsonify({"response": response.text}), 200
+    def generate():
+        stream = gemini_client.models.generate_content_stream(
+            model = "gemini-2.0-flash",
+            contents = user_input,
+        )
+        for chunk in stream:
+            if chunk.text:
+                yield f"data: {json.dumps({'text': chunk.text})}\n\n"
+
+    return Response(generate(), mimetype='text/event-stream')
+
 
 @app.route('/gemini/makeTrip', methods=['POST'])
 def make_trip():
