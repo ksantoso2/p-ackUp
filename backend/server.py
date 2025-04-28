@@ -9,14 +9,12 @@ from google.genai.types import GenerateContentConfig, HttpOptions
 from models.itineraries import User, ItineraryStop, Trip
 
 app = Flask(__name__)
+CORS(app)
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 #variable name is "sensitive"? DO NOT CHANGE
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
-
-
-CORS(app)
 
 
 client = MongoClient("mongodb://localhost:27017/")
@@ -173,4 +171,4 @@ def get_specific_itinerary(username, trip_id):
     }), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=5000)

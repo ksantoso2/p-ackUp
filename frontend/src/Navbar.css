@@ -1,9 +1,10 @@
 .navbar {
     margin-top: 20px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     /* background: #f4f1ee; */
-    background: transparent;
+    /* background: transparent; */
     padding: 8px;
     border-radius: 999px; 
     width: fit-content;

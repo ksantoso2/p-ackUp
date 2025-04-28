@@ -18,7 +18,7 @@ const TripList = () => {
     // getting the itineraries from backend
     const fetchTrips = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/${username}/get-itineraries`); 
+        const response = await fetch(`http://localhost:5000/${username}/get-itineraries`);
         const data = await response.json();
         setTrips(data);
       } catch (error) {
