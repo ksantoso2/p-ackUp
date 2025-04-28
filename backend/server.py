@@ -6,7 +6,7 @@ from google import genai        #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
 from google.genai.types import GenerateContentConfig, HttpOptions
-
+from models.itineraries import User, ItineraryStop, Trip
 
 app = Flask(__name__)
 load_dotenv()
@@ -123,7 +123,72 @@ def create_user():
 
     return jsonify({"message": "User created!", "username": username, "age": age})
 
+# GET request for all trips (for trip list)
+@app.route("/<username>/get-itineraries", methods=["GET"])
+def get_user_itineraries(username):
+    user = User.objects(name=username).first()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    trips = Trip.objects(user=user)
+    response = []
+    for trip in trips:
+        trip_data = {
+            "id": str(trip.id),
+            "name": trip.name,
+            "user_ids": [str(u.id) for u in trip.user],
+            "itineraryStops": []
+        }
+        for stop in trip.itineraryStop:
+            stop_data = {
+                "id": str(stop.id),
+                "placeName": stop.placeName,
+                "latitude": stop.latitude,
+                "longitude": stop.longitude,
+                "address": stop.address,
+                "media": stop.media,
+                "openingHours": stop.openingHours,
+                "city": stop.city,
+                "country": stop.country,
+                "date": stop.date.isoformat(),
+                "timeOfVisit": stop.timeOfVisit,
+                "duration": stop.duration,
+                "notes": stop.notes
+            }
+            trip_data["itineraryStops"].append(stop_data)
+        response.append(trip_data)
+    return jsonify(response), 200
 
+#GET request for a specific trip (for each trip page)
+@app.route("/get-itineraries/<username>/<trip_id>", methods=["GET"])
+def get_specific_itinerary(username, trip_id):
+    user = User.objects(name=username).first()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    trip = Trip.objects(id=trip_id, user=user).first()
+    if trip is None:
+        return jsonify({'error': 'Trip not found'}), 404
+    stops = []
+    for stop in trip.itineraryStop:
+        stops.append({
+            'id': str(stop.id),
+            'placeName': stop.placeName,
+            'latitude': stop.latitude,
+            'longitude': stop.longitude,
+            'address': stop.address,
+            'media': stop.media,
+            'openingHours': stop.openingHours,
+            'city': stop.city,
+            'country': stop.country,
+            'date': stop.date.isoformat(),
+            'timeOfVisit': stop.timeOfVisit,
+            'duration': stop.duration,
+            'notes': stop.notes
+        })
+    return jsonify({
+        'id': str(trip.id),
+        'name': trip.name,
+        'stops': stops
+    }), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
