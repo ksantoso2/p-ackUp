@@ -5,13 +5,13 @@ import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
 
 const Chat = () => {
- const [user_input, set_user_input] = useState("");
- const [response, set_response] = useState("");
- const [loading, setLoading] = useState(false);
- const [error, setError] = useState(null);
- const [history, setHistory] = useState([]);
- const [atBottom, setAtBottom] = useState(false);
- const [showTyping, setShowTyping] = useState(false);
+  const [user_input, set_user_input] = useState("");
+  const [response, set_response] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [atBottom, setAtBottom] = useState(false);
+  const [showTyping, setShowTyping] = useState(false);
 
   const handleAPI = async () => {
     setShowTyping(true);
