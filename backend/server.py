@@ -1,19 +1,30 @@
-from flask import Flask, request, jsonify
+import json
+from flask import Flask, request, jsonify, Response
 from pymongo import MongoClient
 from flask_cors import CORS     #pip install flask-cors
 from google import genai        #pip install google-genai
-from google.genai.types import GenerateContentConfig, HttpOptions
 from dotenv import load_dotenv  # pip install python-dotenv
-from models.itineraries import User, ItineraryStop, Trip
 import os
 from google.genai.types import GenerateContentConfig, HttpOptions
-
+from models.itineraries import User, ItineraryStop, Trip
 
 app = Flask(__name__)
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+
+#variable name is "sensitive"? DO NOT CHANGE 
+gemini_client = genai.Client(api_key="AIzaSyBC4Tie2msLbVKtIdkXXr_P1sf1FX9gXIs")    #UPDATE API KEY FOR OTHER USERS
 #variable name is "sensitive" DO NOT CHANGE (need _ ?)
+gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
+
+
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+
+#variable name is "sensitive"? DO NOT CHANGE
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 
@@ -23,8 +34,6 @@ CORS(app)
 client = MongoClient("mongodb://localhost:27017/")
 db = client["packup"]
 users = db["users"]
-itineraries = db["itineraries"]
-response = ""
 
 
 # Example route
@@ -46,7 +55,6 @@ def gemini():
     user_input = data.get("user_input", "").strip()
     if not user_input:
         return jsonify({"error": "No input provided"}), 400 
-        return jsonify({"error": "No input provided"}), 400 # change to 200 or 400 if no CORS error
 
     system_instructions = [
         """
@@ -74,14 +82,16 @@ def gemini():
     ]
 
 
-    response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents = user_input,
-        config=GenerateContentConfig(system_instruction=system_instructions)
-    )
+    def generate():
+        stream = gemini_client.models.generate_content_stream(
+            model = "gemini-2.0-flash",
+            contents = user_input,
+        )
+        for chunk in stream:
+            if chunk.text:
+                yield f"data: {json.dumps({'text': chunk.text})}\n\n"
     
-    print("Response from Gemini:", response.text) 
-    return jsonify({"response": response.text}), 200
+    return Response(generate(), mimetype='text/event-stream')
 
 @app.route("/users", methods=["GET"])
 def get_users():
@@ -113,8 +123,72 @@ def create_user():
 
     return jsonify({"message": "User created!", "username": username, "age": age})
 
+# GET request for all trips (for trip list)
+@app.route("/<username>/get-itineraries", methods=["GET"])
+def get_user_itineraries(username):
+    user = User.objects(name=username).first()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    trips = Trip.objects(user=user)
+    response = []
+    for trip in trips:
+        trip_data = {
+            "id": str(trip.id),
+            "name": trip.name,
+            "user_ids": [str(u.id) for u in trip.user],
+            "itineraryStops": []
+        }
+        for stop in trip.itineraryStop:
+            stop_data = {
+                "id": str(stop.id),
+                "placeName": stop.placeName,
+                "latitude": stop.latitude,
+                "longitude": stop.longitude,
+                "address": stop.address,
+                "media": stop.media,
+                "openingHours": stop.openingHours,
+                "city": stop.city,
+                "country": stop.country,
+                "date": stop.date.isoformat(),
+                "timeOfVisit": stop.timeOfVisit,
+                "duration": stop.duration,
+                "notes": stop.notes
+            }
+            trip_data["itineraryStops"].append(stop_data)
+        response.append(trip_data)
+    return jsonify(response), 200
 
+#GET request for a specific trip (for each trip page)
+@app.route("/get-itineraries/<username>/<trip_id>", methods=["GET"])
+def get_specific_itinerary(username, trip_id):
+    user = User.objects(name=username).first()
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    trip = Trip.objects(id=trip_id, user=user).first()
+    if trip is None:
+        return jsonify({'error': 'Trip not found'}), 404
+    stops = []
+    for stop in trip.itineraryStop:
+        stops.append({
+            'id': str(stop.id),
+            'placeName': stop.placeName,
+            'latitude': stop.latitude,
+            'longitude': stop.longitude,
+            'address': stop.address,
+            'media': stop.media,
+            'openingHours': stop.openingHours,
+            'city': stop.city,
+            'country': stop.country,
+            'date': stop.date.isoformat(),
+            'timeOfVisit': stop.timeOfVisit,
+            'duration': stop.duration,
+            'notes': stop.notes
+        })
+    return jsonify({
+        'id': str(trip.id),
+        'name': trip.name,
+        'stops': stops
+    }), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
-
