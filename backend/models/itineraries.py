@@ -29,9 +29,9 @@ class Trip(Document):
     
 # Usage example with multiple itinerary stops
 try:
-    user = User.objects(name="John Doe").first()
+    user = User.objects(name="John").first()
     if not user:
-        user = User(name="John Doe", age=20)
+        user = User(name="John", age=20)
         user.save()
 
     if not Trip.objects(name="Paris Trip", user=user).first():

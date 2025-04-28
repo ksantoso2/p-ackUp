@@ -9,37 +9,17 @@ from google.genai.types import GenerateContentConfig, HttpOptions
 from models.itineraries import User, ItineraryStop, Trip
 
 app = Flask(__name__)
+CORS(app)
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-
-#variable name is "sensitive"? DO NOT CHANGE 
-gemini_client = genai.Client(api_key="AIzaSyBC4Tie2msLbVKtIdkXXr_P1sf1FX9gXIs")    #UPDATE API KEY FOR OTHER USERS
-#variable name is "sensitive" DO NOT CHANGE (need _ ?)
-gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
-
-
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
 
 #variable name is "sensitive"? DO NOT CHANGE
 gemini_client = genai.Client(api_key=GEMINI_API_KEY)    #UPDATE API KEY FOR OTHER USERS
 
 
-CORS(app)
-
-
 client = MongoClient("mongodb://localhost:27017/")
 db = client["packup"]
 users = db["users"]
-
-
-# Example route
-@app.route("/members")
-def members():
-    return {"members": ["Member1", "Member2", "Member3, Member4, Member5, Member6, Member7"]}
 
 @app.route("/users/<username>",methods=["DELETE"])
 def delete(username):
@@ -191,5 +171,4 @@ def get_specific_itinerary(username, trip_id):
     }), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(debug=True, host="0.0.0.0", port=5000)

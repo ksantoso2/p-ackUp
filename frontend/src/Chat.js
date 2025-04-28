@@ -96,13 +96,6 @@ const Chat = () => {
 
   return (
     <div className="chat-page">
-        <header className="navbar">
-
-            <button>Trips</button>
-            <button className="active">Plan</button>
-            
-        </header>
-
         {history.length === 0 && (
           <>
             <div className="main-content">
@@ -150,5 +143,6 @@ const Chat = () => {
       </div>
   );
 };
+
 
 export default Chat;

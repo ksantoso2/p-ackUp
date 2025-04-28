@@ -10,28 +10,6 @@
     position: relative;
 }
 
-.navbar {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.navbar button {
-    background: #EBE7E3;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #3A3A3A;
-    font-family: 'Work Sans', sans-serif;
-}
-
-.navbar .active {
-    background-color: #7D8B97;
-    color: white;
-}
-
 .main-content h1 {
     font-size: 36px;
     font-family: 'Inika', serif;
@@ -115,7 +93,6 @@
     padding: 20px;
     max-height: 60vh;
     overflow-y: auto;
-    width: 100%;
 }
 
 .chat-message {

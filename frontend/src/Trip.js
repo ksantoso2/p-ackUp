@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Trip.css';
 import { useParams, useNavigate } from 'react-router-dom';
 
+
 const Trip = () => {
   const { username, tripId } = useParams();
   const [trip, setTrip] = useState('');
@@ -66,12 +67,6 @@ const Trip = () => {
     <div>
       <header className="trip-header">
         <h1>{trip.name}</h1>
-        <div className="nav-buttons">
-        <button onClick={() => navigate(`/triplist/${username}`)}>Trips</button> 
-        {/* Trip button navigates back to url with user (instead of just /triplist) so their trip data is there*/}
-        <button onClick={() => navigate(`/chat/`)}>Plan</button> 
-        {/* Chat button navigates to general chat page*/}
-        </div>
       </header>
 
       <main className="trip-main">
