@@ -3,6 +3,7 @@ import "./Chat.css";
 import slothImg from '../src/assets/sloth.svg';
 import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
+import ReactMarkdown from 'react-markdown'
 
 const Chat = () => {
   const [user_input, set_user_input] = useState("");
@@ -108,7 +109,7 @@ const Chat = () => {
                 {history.map((entry, index) => (
                     <div key={index} className="chat-message">
                       <div className="user-message">{entry.question}</div>
-                      <div className="bot-message">{entry.answer}</div> 
+                      <div className="bot-message"><ReactMarkdown>{entry.answer}</ReactMarkdown></div> 
                     </div>
                   ))}
 
