@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, jsonify, Response
 from pymongo import MongoClient
 from flask_cors import CORS     #pip install flask-cors
-from google import genai        #pip install google-genai
+from google import genai       #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
 from google.genai.types import GenerateContentConfig, HttpOptions
@@ -80,7 +80,6 @@ def gemini():
         - When possible, highlight small/family owned businesses instead of focusing all on popular touristy spots. 
         """
     ]
-
 
     def generate():
         stream = gemini_client.models.generate_content_stream(
