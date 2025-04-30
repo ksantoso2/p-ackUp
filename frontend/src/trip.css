@@ -3,57 +3,48 @@ body {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f9f9f9;
-    
   }
-
   
   /* ============================
      HEADER
   ============================= */
   .trip-header {
+/*     background-image: url('/images/barcelona.jpg'); Update path if needed 
+    background-size: cover;*/    
     background-position: center;
     height: 200px;
     color: white;
     display: flex;
-    flex-direction: column;        /* stack h1 and navbar vertically */
-    align-items: center;           /* center horizontally */
-    justify-content: center;       /* center vertically */
+    justify-content: space-between;
+    align-items: flex-end;
     padding: 20px;
     position: relative;
     border-bottom: 2px solid #ccc;
-    background-color: #fdf9f5;     /* optional: for better visibility */
   }
-
-  
   
   .trip-header h1 {
-    font-size: 3rem;               /* make heading larger */
-    margin: 0 0 10px 0;
-    text-align: center;
+    font-size: 2rem;
+    margin: 0;
   }
   
-  .navbar {
+  .nav-buttons {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.navbar button {
-    background: #f9f9f9;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 18px;
-    color: #3A3A3A;
-    font-family: 'Work Sans', sans-serif;
-}
+    gap: 10px;
+  }
   
-.navbar button:hover {
-  background-color: #f9f9f9; /* soft blue on hover */
-  color: #222;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
+  .nav-buttons button {
+    background-color: #dcebf9;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .nav-buttons button:hover {
+    background-color: #bedef3;
+  }
   
   /* ============================
      MAIN LAYOUT
