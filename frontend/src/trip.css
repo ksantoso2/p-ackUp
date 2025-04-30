@@ -50,7 +50,7 @@
   }
     
   .navbar button:hover {
-    background-color: #f9f9f9; /* soft blue on hover */
+    background-color: #c5dee5; /* soft blue on hover */
     color: #222;
     transition: background-color 0.2s ease, color 0.2s ease;
   }

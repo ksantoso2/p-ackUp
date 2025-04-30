@@ -12,9 +12,6 @@ from mongoengine import connect
 from datetime import datetime
 from models.itineraries import User, ItineraryStop, Trip
 
-
-
-
 app = Flask(__name__)
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
