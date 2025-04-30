@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './TripList.css';
-import slothImg from './images/Group 39.png';
-import plantImg from './images/Group 43.png';
+import slothImg from './images/Group 43.png';
+import plantImg from './images/Group 39.png';
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -10,29 +11,30 @@ import { Link } from 'react-router-dom';
 
 
 const TripList = () => {
+  const navigate = useNavigate();
       // 🌱 TODO: Replace with MongoDB data once backend is ready
     const destinations = [
         "Barcelona, Spain",
         "Paris, France",
         "Tokyo, Japan",
-        "New York, USA"
+        "New York, USA",
+        "Newa York, USA",
     ];
 
     return (
         <div className="trip-list-container">
-          {/* Decorative images */}
-          <img src={slothImg} alt="sloth" className="sloth-image" />
-          <img src={plantImg} alt="palms" className="palm-image" />
-    
-          {/* Top toggle (aesthetic only)
-          <div className="toggle-container">
-            <div className="toggle-switch">
-              <div className="toggle-left">✈️ Trips</div>
-              <div className="toggle-right">💬 Plan</div>
+          <div className="top"><img src={slothImg} alt="sloth" className="sloth-image" /> 
+            <div className="navbar">
+              <button className="active">Trips</button>
+              <button onClick= {() => {navigate('/chat');}}>Plan</button>
             </div>
-          </div> */}
+          </div>
+          
+          <div className="tree"><img src={plantImg} alt="palms" className="palm-image" /> </div>
+          
     
           {/* Cards */}
+          <div className = "scroll">
           <div className="destination-card-list">
             {destinations.map((city, index) => (
               <Link
@@ -44,6 +46,7 @@ const TripList = () => {
                 <span className="destination-icon">↗</span>
               </Link>
             ))}
+          </div>
           </div>
         </div>
       );

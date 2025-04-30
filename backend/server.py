@@ -8,6 +8,12 @@ import os
 from formatHelper import TripItineraryModel
 import json
 from google.genai.types import GenerateContentConfig, HttpOptions
+from mongoengine import connect
+from datetime import datetime
+from models.itineraries import User, ItineraryStop, Trip
+
+
+
 
 app = Flask(__name__)
 load_dotenv()
@@ -73,62 +79,127 @@ def gemini():
             model = "gemini-2.0-flash",
             contents = user_input,
         )
+        
         for chunk in stream:
             if chunk.text:
                 yield f"data: {json.dumps({'text': chunk.text})}\n\n"
-
+                print(chunk.text)
     return Response(generate(), mimetype='text/event-stream')
 
 
 @app.route('/gemini/makeTrip', methods=['POST'])
 def make_trip():
     try:
-        # Get history from request
+        # Step 1: Get chat history
         history = request.get_json().get("history", [])
-        print("hist ", history)
-        # Build Gemini prompt
-        topic =  history
-        base_prompt = f"Generate json of the trips activities off this chat: {topic}"
-        optimized_prompt = base_prompt + '''Use this JSON schema:
-        status = {
-        "userName": "Name of the user going on the trip" (str),
-        "tripDestination": "Main destination of the trip" (str),
-        "visits":
-            {
-                "placeName": "Name of attraction to visit on the trip" (str),
-                "latitude": 31.2333 (float), 
-                "longitude": 31.2333 (float), 
-                "address": "Address of the attraction" (str), 
-                "city": "City where the attraction is located" (str),
-                "country": "Country where the attraction is located" (str),  
-                "date": "Date of visit in ISO format" (dateTime), 
-                "timeOfVisit": "Time to visit the attraction" (str),
-                "openingHours": "Opening hours of the attraction" (str),
-                "duration": "Duration of visit at the attraction" (str),
-                "notes": "Additional notes about the attraction" (str)
-            },
-            ...
-        }
+        print("Chat history:", history)
 
+        # Step 2: Build prompt
+        base_prompt = f"Generate json of the trips activities off this chat: {history}. Every visit must have a placeName, latitude, longitude, address, city, country, date, timeOfVisit, openingHours, duration, and notes"
+        optimized_prompt = base_prompt + ''' Use this JSON schema:
+        status = {
+            "userName": "Name of the user going on the trip" (str),
+            "tripDestination": "Main destination of the trip" (str),
+            "visits": [
+                {
+                    "placeName": "Name of attraction to visit on the trip" (str),
+                    "latitude": 31.2333 (float), 
+                    "longitude": 31.2333 (float), 
+                    "address": "Address of the attraction" (str), 
+                    "city": "City where the attraction is located" (str),
+                    "country": "Country where the attraction is located" (str),  
+                    "date": "Date of visit in ISO format" (dateTime), 
+                    "timeOfVisit": "Time to visit the attraction" (str),
+                    "openingHours": "Opening hours of the attraction" (str),
+                    "duration": "Duration of visit at the attraction" (str),
+                    "notes": "Additional notes about the attraction" (str)
+                }
+            ]
+        }
         Return: status'''
 
+        # Step 3: Generate content from Gemini
         g_response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=[optimized_prompt],
-        config = {
-            'response_mime_type': 'application/json',
-            'response_schema': list[TripItineraryModel],
-        },
+            model="gemini-2.0-flash",
+            contents=[optimized_prompt],
+            config={
+                'response_mime_type': 'application/json',
+                'response_schema': list[TripItineraryModel],
+            },
         )
+        itinerary = json.loads(g_response.text) 
+
         print(g_response.text)
-        
-        # # Return full response with titles and original trip
-        return jsonify({"response": g_response.text}), 200
+        print(itinerary[0]['userName'])
+
+        # Step 4: Parse response JSON
+        itinerary_data = json.loads(g_response.text)
+        if isinstance(itinerary_data, list):
+            itinerary_data = itinerary_data[0]  # Handle list format
+
+        print("Parsed itinerary:", itinerary_data)
+
+        # Step 5: Validate and store
+        user_name = itinerary_data.get("userName")
+        trip_destination = itinerary_data.get("tripDestination")
+        visits = itinerary_data.get("visits", [])
+
+        if not user_name or not trip_destination or not visits:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # Check or create user
+        user = User.objects(name=user_name).first()
+        if not user:
+            user = User(name=user_name)
+            user.save()
+            print(f"Created new user: {user_name}")
+
+        # Save each itinerary stop
+        itinerary_stops = []
+        for visit in visits:
+            stop = ItineraryStop(
+                placeName=visit["placeName"],
+                latitude=visit["latitude"],
+                longitude=visit["longitude"],
+                address=visit["address"],
+                city=visit["city"],
+                country=visit["country"],
+                date=datetime.strptime(visit["date"], "%Y-%m-%dT%H:%M:%SZ"), 
+                timeOfVisit=visit["timeOfVisit"],
+                openingHours=visit["openingHours"],
+                duration=visit["duration"],
+                notes=visit["notes"]
+            )
+            stop.save()
+            itinerary_stops.append(stop)
+        print("WE MADE IT")
+        # Save trip
+        trip = Trip(
+            itineraryStop=itinerary_stops,
+            name=trip_destination,
+            user=[user]
+        )
+        trip.save()
+        print(f"Message: Itinerary created and stored successfully!\n"
+            f"Trip ID: {str(trip.id)}\n"
+            f"User: {user_name}\n"
+            f"Destination: {trip_destination}\n"
+            f"Number of Visits: {len(itinerary_stops)}")
+
+        return jsonify({
+            "message": "Itinerary created and stored successfully!",
+            "trip_id": str(trip.id),
+            "user": user_name,
+            "destination": trip_destination,
+            "num_visits": len(itinerary_stops)
+        }), 201
 
     except Exception as e:
-        print("Error occurred:", e)
-        return jsonify({"error": str(e)}), 500
-    
+        print("Error:", e)
+        print(traceback.format_exc())
+        return jsonify({"error": f"Failed to generate and store itinerary: {str(e)}"}), 500
+
+
 @app.route("/users", methods=["GET"])
 def get_users():
     get_users = users.find({}, {"_id": 0, "username": 1, "age": 1})  
@@ -159,37 +230,99 @@ def create_user():
 
     return jsonify({"message": "User created!", "username": username, "age": age})
 
+import traceback
+
 @app.route("/itineraries", methods=["POST"])
 def create_itinerary():
-   data = request.get_json()
-   try:
-       user_data = data.get("user")
-       user = User.objects(name=user_data["name"]).first()
-       if not user:
-           user = User(name=user_data["name"], age=user_data["age"])
-           user.save()
+    print("HELLO!!!!!!!!")
+    # try:
+        # # Get the data from the request
+        # data = request.get_json()
+        # print("TEST", data)
+
+        # # Check if the data is a list and access the first item
+        # if isinstance(data, list):
+        #     data = data[0]  # Access the first item in the list
+    try:
+        # Step 1: Parse the JSON from the request
+        data1 = request.get_json()
+        print("RAW DATA:", data1)
+
+        # Step 2: Handle Gemini-style response wrapping
+        if isinstance(data1, dict) and "response" in data1 and isinstance(data1["response"], str):
+            data = json.loads(data1["response"])
+        else:
+            data = data1
+        print("OOOOOOOOO ", data)
+        # Step 3: If the data is a list, take the first item
+        if isinstance(data, list):
+            data = data[0]
+        # Parse the data from the first item
+        user_name = data.get("userName")
+        trip_destination = data.get("tripDestination")
+        visits = data.get("visits", [])
+
+        # Validate the input
+        if not user_name or not trip_destination or not visits:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # Check if the user exists, if not create the user
+        user = User.objects(name=user_name).first()
+        if not user:
+            # Create the user if not found
+            user = User(name=user_name)
+            user.save()  # Save the new user to MongoDB
+            print(f"Created new user: {user_name}")
+
+        # Create a list of ItineraryStop instances
+        itinerary_stops = []
+        for visit in visits:
+            # Create a new ItineraryStop instance
+            stop = ItineraryStop(
+                placeName=visit["placeName"],
+                latitude=visit["latitude"],
+                longitude=visit["longitude"],
+                address=visit["address"],
+                city=visit["city"],
+                country=visit["country"],
+                date=datetime.strptime(visit["date"], "%Y-%m-%dT%H:%M:%SZ"),  # Correct usage of datetime
+                timeOfVisit=visit["timeOfVisit"],
+                openingHours=visit["openingHours"],
+                duration=visit["duration"],
+                notes=visit["notes"]
+            )
+            stop.save()  # Save the stop to MongoDB
+            itinerary_stops.append(stop)  # Add the stop to the list of stops
+
+        # Create a new Trip instance with the reference to ItineraryStop and User
+        trip = Trip(
+            itineraryStop=itinerary_stops,  # List of ItineraryStop references
+            name=trip_destination,
+            user=[user]  # List of User references
+        )
+        trip.save()  # Save the trip to MongoDB
+
+        # Return the newly created itinerary with its unique MongoDB ID
+        return jsonify({
+            "message": "Itinerary created successfully",
+            "trip_id": str(trip.id),  # Return the MongoDB ID of the trip
+            "itinerary": {
+                "userName": user_name,
+                "tripDestination": trip_destination,
+                "visits": [{"placeName": stop.placeName, "date": stop.date, "openingHours": stop.openingHours} for stop in itinerary_stops]  # List of stops with place names and dates
+            }
+        }), 201
 
 
-       stop_refs = []
-       for stop_data in data.get("itineraryStops", []):
-           stop = ItineraryStop(**stop_data)
-           stop.save()
-           stop_refs.append(stop)
+    except Exception as e:
+        # Log detailed error information
+        print("Error occurred:", e)
+        print("Traceback:", traceback.format_exc())  # Print full traceback for better debugging
+        return jsonify({"error": f"An error occurred while creating the itinerary: {str(e)}"}), 500
 
 
-       trip = Trip(
-           name=data["name"],
-           user=[user],
-           itineraryStop=stop_refs
-       )
-       trip.save()
 
-       return jsonify({"message": "Trip created", "trip_id": str(trip.id)}), 201
 
-   except ValidationError as ve:
-       return jsonify({"error": str(ve)}), 400
-   except Exception as e:
-       return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)

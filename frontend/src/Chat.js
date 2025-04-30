@@ -4,6 +4,9 @@ import "./Chat.css";
 import slothImg from '../src/assets/sloth.svg';
 import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
+import ReactMarkdown from 'react-markdown';
+import { useNavigate } from 'react-router-dom'
+
 
 const Chat = () => {
   const [user_input, set_user_input] = useState("");
@@ -14,6 +17,8 @@ const Chat = () => {
   const [history, setHistory] = useState([]);
   const [atBottom, setAtBottom] = useState(false);
   const [showTyping, setShowTyping] = useState(false);
+  const navigate = useNavigate();
+
   
   // localStorage.setItem("username", "sal");
     const username = localStorage.getItem("username");
@@ -117,6 +122,173 @@ const Chat = () => {
               setLoading(false);
           }
       };
+
+//   const handleMakeTrip = async () => {
+//     if (history.length === 0) {
+//       setError("No chat history to make a trip from.");
+//       return;
+//     }
+//     setLoading(true);
+//     setError(null);
+//     console.log("Etestinput:");
+
+//     try {
+//       // Call the makeTrip API to get the generated trip data
+//       const res = await fetch('http://127.0.0.1:5000/gemini/makeTrip', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ history }),
+//       });
+
+//       if (!res.ok) {
+//         throw new Error(`HTTP error! Status: ${res.status}`);
+//       }
+
+//       // Parse the response from the makeTrip API
+//       const tripData = await res.json();
+//       console.log("Trip data received from /gemini/makeTrip:", tripData);
+
+//       // Check if the response is empty or has no required fields
+//       if (!tripData.response || !tripData.response.tripDestination || !tripData.response.visits) {
+//         throw new Error("Invalid response format from /gemini/makeTrip.");
+//       }
+//       console.log("Entering exampleFunction with input:");
+//       // Send the trip data to /itineraries to save it in MongoDB
+//       const itineraryRes = await fetch('http://127.0.0.1:5000/itineraries', {
+//         method: 'POST',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({
+//           userName: localStorage.getItem("username"), // Assuming username is saved in localStorage
+//           tripDestination: tripData.response.tripDestination, // Assuming the response includes a tripDestination
+//           visits: tripData.response.visits, // Assuming the response includes a "visits" field
+//         }),
+//       });
+//       console.log("aaaaaaaaaaaaaaaaa");
+
+//       if (!itineraryRes.ok) {
+//         throw new Error(`HTTP error while saving itinerary! Status: ${itineraryRes.status}`);
+//       }
+
+//       const savedItinerary = await itineraryRes.json();
+//       console.log("Itinerary saved:", savedItinerary);
+
+//       // Optional: Handle the saved itinerary response (e.g., display confirmation, clear chat, etc.)
+//       navigate('/TripList');  // Navigate to the Trip List page
+
+//     } catch (err) {
+//       setError(err.message);
+//       console.error("Error during makeTrip process:", err); // Log the error to the console for debugging
+//     } finally {
+//       setLoading(false);
+//     }
+// };
+
+// const handleMakeTrip = async () => {
+//   if (history.length === 0) {
+//       setError("No chat history to make a trip from.");
+//       return;
+//   }
+//   setLoading(true);
+//   setError(null);
+
+//   try {
+//       // Prepare your trip data (this should be handled in your app)
+//       const tripData = {
+//         "userName": "Traveler",
+//         "tripDestination": "Wisconsin",
+//         "visits": [
+//           {
+//             "placeName": "Lakefront Brewery",
+//             "latitude": 43.0509,
+//             "longitude": -87.8974,
+//             "address": "1872 N Commerce St, Milwaukee, WI 53212",
+//             "media": [],
+//             "openingHours": "Varies, check website",
+//             "city": "Milwaukee",
+//             "country": "USA",
+//             "date": "2024-07-20T09:00:00Z",
+//             "timeOfVisit": "9:00 AM",
+//             "duration": "3 hours",
+//             "notes": "Book tour in advance for a fun, interactive experience."
+//           },
+//           ]
+//       };
+
+//       // Send the prepared trip data to the /itineraries route
+//       const saveRes = await fetch('http://127.0.0.1:5000/itineraries', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify(tripData),
+//       });
+
+//       if (!saveRes.ok) {
+//           throw new Error(`HTTP error! Status: ${saveRes.status}`);
+//       }
+
+//       const saveResponse = await saveRes.json();
+//       console.log("Itinerary saved:", saveResponse);
+
+//       // Optional: Navigate to the Trip List page or show success
+//       navigate('/TripList');
+
+//   } catch (err) {
+//       setError(err.message);
+//       console.error("Error during saveItinerary process:", err);
+//   } finally {
+//       setLoading(false);
+//   }
+// };
+
+// const handleMakeTrip = async () => {
+//   if (history.length === 0) {
+//       setError("No chat history to make a trip from.");
+//       return;
+//   }
+//   setLoading(true);
+//   setError(null);
+
+//   try {
+//       // Step 1: Call the Gemini makeTrip route
+//       const geminiRes = await fetch('http://127.0.0.1:5000/gemini/makeTrip', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify({ history }),
+//       });
+
+//       if (!geminiRes.ok) {
+//           throw new Error(`Gemini error! Status: ${geminiRes.status}`);
+//       }
+
+//       const tripData = await geminiRes.json();
+
+//       // Step 2: Send the returned trip data to the /itineraries route
+//       const saveRes = await fetch('http://127.0.0.1:5000/itineraries', {
+//           method: 'POST',
+//           headers: { 'Content-Type': 'application/json' },
+//           body: JSON.stringify(tripData),
+//       });
+
+//       if (!saveRes.ok) {
+//           throw new Error(`Save error! Status: ${saveRes.status}`);
+//       }
+
+//       const saveResponse = await saveRes.json();
+//       console.log("Itinerary saved:", saveResponse);
+
+//       // Optional: Redirect to trip list page
+//       navigate('/TripList');
+
+//   } catch (err) {
+//       setError(err.message);
+//       console.error("Error making and saving trip:", err);
+//   } finally {
+//       setLoading(false);
+//   }
+// };
+
+
+  
+  
       
 
   const handleKeyDown = (event) => {
@@ -126,12 +298,18 @@ const Chat = () => {
   };
 
   return (
+    
     <div className="chat-page">
         <header className="navbar">
-
-            <button>Trips</button>
+            <button onClick= {() => {navigate('/TripList');}}>Trips</button>
             <button className="active">Plan</button>
-            
+            <button onClick={() => {
+                handleMakeTrip();
+                // setHistory([]); 
+                // setAtBottom(false);
+                // navigate('/TripList');}}>
+            }}>
+                  Make Trip!</button>
         </header>
 
         {history.length === 0 && (
@@ -146,7 +324,10 @@ const Chat = () => {
                 {history.map((entry, index) => (
                     <div key={index} className="chat-message">
                       <div className="user-message">{entry.question}</div>
-                      <div className="bot-message">{entry.answer}</div> 
+                      <div className="bot-message">
+                        <ReactMarkdown>{entry.answer}</ReactMarkdown>
+                      </div>
+
                     </div>
                   ))}
 
@@ -171,12 +352,6 @@ const Chat = () => {
             <button onClick={handleAPI} className="submit-button">
               <img src={submitImg} alt="Submit" className="submit-icon" />
             </button>
-            <button onClick={() => {
-              setHistory([]); 
-              setAtBottom(false);}}>
-                New chat
-              </button>
-              <button onClick={handleMakeTrip}>Make Trip!</button>
           {error && <p className="error">{error}</p>}
         </div>
       </div>

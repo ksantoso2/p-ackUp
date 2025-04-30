@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Trip.css';
+import { useNavigate } from 'react-router-dom'
 
 const Trip = () => {
   const [tripName, setTripName] = useState('My Awesome Trip');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Load Google Maps script
@@ -39,11 +41,12 @@ const Trip = () => {
   return (
     <div>
       <header className="trip-header">
-        <h1>Barcelona, Spain</h1>
-        <div className="nav-buttons">
-          <button>Trips</button>
-          <button>Plan</button>
-        </div>
+        
+        <header className="navbar">
+            <button onClick= {() => {navigate('/TripList');}}>Trips</button>
+            <button onClick= {() => {navigate('/chat');}}>Plan</button>
+            </header>
+            <h1>Barcelona, Spain</h1>
       </header>
 
       <main className="trip-main">
@@ -52,7 +55,7 @@ const Trip = () => {
           <div className="itinerary-list">
             {/* Itinerary items */}
           </div>
-          <button className="edit-btn">Edit</button>
+          {/* <button className="edit-btn">Edit</button> */}
         </section>
 
         <section className="map">
