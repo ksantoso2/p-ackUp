@@ -80,7 +80,12 @@ const Trip = () => {
   return (
     <div>
       <header className="trip-header">
-        <h1>{trip.name}</h1>
+        
+        <header className="navbar">
+            <button onClick= {() => {navigate('/TripList');}}>Trips</button>
+            <button onClick= {() => {navigate('/chat');}}>Plan</button>
+            </header>
+            <h1>Barcelona, Spain</h1>
       </header>
 
       <main className="trip-main">
@@ -100,7 +105,7 @@ const Trip = () => {
               </div>
             ))}
           </div>
-          <button className="edit-btn">Edit</button>
+          {/* <button className="edit-btn">Edit</button> */}
         </section>
 
         <section className="map">
