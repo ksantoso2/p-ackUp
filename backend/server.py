@@ -134,7 +134,7 @@ def make_trip():
         print("Parsed itinerary:", itinerary_data)
 
         # Step 5: Validate and store
-        user_name = itinerary_data.get("userName")
+        user_name = request.get_json().get("username") or itinerary_data.get("userName")
         trip_destination = itinerary_data.get("tripDestination")
         visits = itinerary_data.get("visits", [])
 

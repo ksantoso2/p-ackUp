@@ -6,7 +6,8 @@ import treeImg from '../src/assets/trees.svg';
 import submitImg from '../src/assets/submitbutton.svg';
 import ReactMarkdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import PlaneImg from '../src/assets/plane.svg';
+import ChatboxImg from '../src/assets/chaticon.svg';
 
 const Chat = () => {
   const [user_input, set_user_input] = useState("");
@@ -107,12 +108,17 @@ const Chat = () => {
               const res = await fetch('http://127.0.0.1:5000/gemini/makeTrip', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ history }),
+                  body: JSON.stringify({
+                    history,
+                    username: username  
+                  }),
               });
 
               if (!res.ok) {
                   throw new Error(`HTTP error! Status: ${res.status}`);
               }
+              const data = await res.json();
+              navigate(`/triplist/${username}`);
           } catch (err) {
               setError(err.message);
           } finally {
@@ -298,15 +304,30 @@ const Chat = () => {
     
     <div className="chat-page">
         <header className="navbar">
-            <button onClick= {() => {navigate('/TripList');}}>Trips</button>
-            <button className="active">Plan</button>
-            <button onClick={() => {
-                handleMakeTrip();
-                // setHistory([]); 
-                // setAtBottom(false);
-                // navigate('/TripList');}}>
-            }}>
-                  Make Trip!</button>
+        <button
+              onClick={() => navigate(`/triplist/${username}`)}
+              className={`nav-link ${window.location.pathname.includes("triplist") ? "active" : ""}`}
+            >
+              <span className="icon">
+                <img src={PlaneImg} alt="plane" className="plane-img" />
+              </span>
+              Trips
+            </button>
+            <button
+              onClick={() => navigate(`/chat/${username}`)}
+              className={`nav-link ${window.location.pathname.includes("chat") ? "active" : ""}`}
+            >
+              <span className="icon">
+                <img src={ChatboxImg} alt="chatbox" className="chat-box-img" />
+              </span>
+              Plan
+            </button>
+            <button
+              onClick={handleMakeTrip}
+              className="nav-link"
+            >
+              Make Trip!
+            </button>
         </header>
 
         {history.length === 0 && (

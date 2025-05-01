@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Trip.css';
 import { useParams, useNavigate } from 'react-router-dom';
-
+import PlaneImg from '../src/assets/plane.svg';
+import ChatboxImg from '../src/assets/chaticon.svg';
 
 const Trip = () => {
   const { username, tripId } = useParams();
@@ -82,10 +83,26 @@ const Trip = () => {
       <header className="trip-header">
         
         <header className="navbar">
-            <button onClick= {() => {navigate('/TripList');}}>Trips</button>
-            <button onClick= {() => {navigate('/chat');}}>Plan</button>
+<button
+                            onClick={() => navigate(`/triplist/${username}`)}
+                            className={`nav-link ${window.location.pathname.includes("triplist") ? "active" : ""}`}
+                          >
+                            <span className="icon">
+                              <img src={PlaneImg} alt="plane" className="plane-img" />
+                            </span>
+                            Trips
+                          </button>
+                          <button
+                            onClick={() => navigate(`/chat/${username}`)}
+                            className={`nav-link ${window.location.pathname.includes("chat") ? "active" : ""}`}
+                          >
+                            <span className="icon">
+                              <img src={ChatboxImg} alt="chatbox" className="chat-box-img" />
+                            </span>
+                            Plan
+                          </button>
             </header>
-            <h1>Barcelona, Spain</h1>
+            <h1>{trip.name}</h1>
       </header>
 
       <main className="trip-main">

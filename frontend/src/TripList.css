@@ -12,9 +12,8 @@
 /* === Sloth image === */
 .sloth-image {
   position: absolute;
-  top: 0;
+  top: -0;
   left: 0;
-  width: 25rem;
   z-index: 1;
 }
 
@@ -23,7 +22,6 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 12rem;
   z-index: 0;
 }
 

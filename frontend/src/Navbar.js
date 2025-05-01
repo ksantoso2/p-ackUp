@@ -1,4 +1,4 @@
-import { useParams, NavLink, useLocation } from "react-router-dom";
+/* import { useParams, NavLink, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import Chat from './Chat';
 import TripList from './TripList';
@@ -24,4 +24,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbar; */
