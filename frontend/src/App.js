@@ -13,7 +13,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/Trip" element={<Trip />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:username" element={<Chat />} />
         <Route path="/signup" element={<Signup /> } />
         <Route path="/login" element={<Login />} /> {/* Login Page */}
         <Route path="/triplist/:username" element={<TripList />} /> 
