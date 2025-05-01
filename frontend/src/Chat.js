@@ -33,7 +33,13 @@ const Chat = () => {
       const res = await fetch("http://127.0.0.1:5000/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_input }),
+        body: JSON.stringify({ 
+          user_input,
+          history: history.map(h => ({ role: "user", content: h.question })).flatMap((msg, i) => [
+            msg,
+            {role: "assistant", content:history[i].answer}
+          ])
+        }),
       });
 
       if (!res.ok) {
@@ -115,7 +121,7 @@ const Chat = () => {
 
                   {showTyping && (
                     <div className="chat-message">
-                      <div className="bot-message"> The Sloth is typing...</div>
+                      <div className="bot-message"> The Sloth is Thinking...</div>
                     </div>
                   )}
           </div>

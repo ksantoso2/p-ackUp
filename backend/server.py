@@ -30,6 +30,14 @@ def delete(username):
 @app.route("/gemini", methods = ['POST'])
 def gemini():
     data = request.get_json()
+    user_input = data.get("user_input", "").strip()
+
+    chat_history = data.get("history", [])
+    history_text = ""
+    for entry in chat_history:
+        history_text += f"{entry['role'].capitalize()}: {entry['content']}\n"
+    full_prompt = history_text + f"User: {user_input}"
+
     print("Received data:", data)  
 
     user_input = data.get("user_input", "").strip()
@@ -64,7 +72,7 @@ def gemini():
     def generate():
         stream = gemini_client.models.generate_content_stream(
             model = "gemini-2.0-flash",
-            contents = user_input,
+            contents = full_prompt
         )
         for chunk in stream:
             if chunk.text:
