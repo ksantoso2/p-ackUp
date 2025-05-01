@@ -170,5 +170,11 @@ def get_specific_itinerary(username, trip_id):
         'stops': stops
     }), 200
 
+# getting the api key so that Trip.js can fetch it
+@app.route("/api/maps-key")
+def get_maps_key():
+    api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+    return jsonify({"key": api_key})
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

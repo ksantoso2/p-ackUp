@@ -23,23 +23,36 @@ const Trip = () => {
     fetchTrip();
   }, [username, tripId]);
 
-  useEffect(() => {
-    // Load Google Maps script
+   useEffect(() => {
     if (!trip || !trip.stops) return;
-    const loadScript = () => {
-      if (window.google) {
-        initMap();
-        return;
+  
+    const loadScript = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/maps-key"); // Get key from backend
+        const data = await res.json();
+        const apiKey = data.key;
+  
+        if (!apiKey) {
+          console.error("Google Maps API key is missing.");
+          return;
+        }
+  
+        if (window.google) {
+          initMap();
+          return;
+        }
+  
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+        script.async = true;
+        script.defer = true;
+        script.onload = initMap;
+        document.head.appendChild(script);
+      } catch (err) {
+        console.error("Failed to load Google Maps API key:", err);
       }
-
-      const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY`;
-      script.async = true;
-      script.defer = true;
-      script.onload = initMap;
-      document.head.appendChild(script);
     };
-
+  
     const initMap = () => {
       const map = new window.google.maps.Map(document.getElementById('map'), {
         center: {
@@ -48,7 +61,7 @@ const Trip = () => {
         },
         zoom: 12
       });
-
+  
       trip.stops.forEach((stop) => {
         new window.google.maps.Marker({
           position: { lat: stop.latitude, lng: stop.longitude },
@@ -57,9 +70,10 @@ const Trip = () => {
         });
       });
     };
-
+  
     loadScript();
   }, [trip]);
+  
 
   if (!trip) return <p>Loading...</p>;
 
