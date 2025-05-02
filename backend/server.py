@@ -2,7 +2,7 @@ import json
 from flask import Flask, request, jsonify, Response
 from pymongo import MongoClient
 from flask_cors import CORS     #pip install flask-cors
-from google import genai        #pip install google-genai
+from google import genai       #pip install google-genai
 from dotenv import load_dotenv  # pip install python-dotenv
 import os
 from formatHelper import TripItineraryModel
@@ -37,7 +37,16 @@ def delete(username):
 @app.route("/gemini", methods = ['POST'])
 def gemini():
     data = request.get_json()
-    # print("Received data:", data)  
+    user_input = data.get("user_input", "").strip()
+
+    chat_history = data.get("history", [])
+    history_text = ""
+    for entry in chat_history:
+        history_text += f"{entry['role'].capitalize()}: {entry['content']}\n"
+    full_prompt = history_text + f"User: {user_input}"
+
+    print("Received data:", data)  
+    
     user_input = data.get("user_input", "").strip()
     if not user_input:
         return jsonify({"error": "No input provided"}), 400 
@@ -67,11 +76,10 @@ def gemini():
         """
     ]
 
-
     def generate():
         stream = gemini_client.models.generate_content_stream(
             model = "gemini-2.0-flash",
-            contents = user_input,
+            contents = full_prompt
         )
         
         for chunk in stream:
