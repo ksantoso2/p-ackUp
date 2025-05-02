@@ -5,15 +5,14 @@ import React from 'react';
 import Chat from './Chat';
 import Trip from './Trip';
 import TripList from './TripList';
-import Navbar from './Navbar';
+// import Navbar from './Navbar';
 
 function App() {
   return (
     <Router>
-      <Navbar/>
       <Routes>
         <Route path="/Trip" element={<Trip />} />
-        <Route path="/chat" element={<Chat />} />
+        <Route path="/chat/:username" element={<Chat />} />
         <Route path="/signup" element={<Signup /> } />
         <Route path="/login" element={<Login />} /> {/* Login Page */}
         <Route path="/triplist/:username" element={<TripList />} /> 

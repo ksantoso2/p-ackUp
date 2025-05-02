@@ -9,21 +9,35 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const handleUser = async () => {
-    await fetch ('http://127.0.0.1:5000/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({username, age: Number(age) }), // convert age to integer
-    });
-    if (!username || !age){
+    if (!username || !age) {
       alert('Both fields are required!');
       return;
     }
+    try {
+      const response = await fetch('http://127.0.0.1:5000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, age: Number(age) })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        alert(`Signup failed: ${data.error || "Unknown error"}`);
+        return;
+      }
+      const data = await response.json();
 
-    setMessage (`User Created!`); // success message
-    navigate('/chat'); // redirect
-  }
+      localStorage.setItem("username", data.username);
+      localStorage.setItem("age", data.age);
+      setMessage("User Created!");
+  
+      navigate(`/chat/${data.username}`);
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("An error occurred during signup.");
+    }
+  };
 
 
   return (

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './TripList.css';
-import slothImg from './images/Group 39.png';
-import plantImg from './images/Group 43.png';
-
+import slothImg from './images/Group 43.png';
+import plantImg from './images/Group 39.png';
+import PlaneImg from '../src/assets/plane.svg';
+import ChatboxImg from '../src/assets/chaticon.svg';
 
 
 //import { MoveDiagonal } from 'lucide-react';
@@ -36,19 +37,34 @@ const TripList = () => {
 
     return (
         <div className="trip-list-container">
-          {/* Decorative images */}
-          <img src={slothImg} alt="sloth" className="sloth-image" />
-          <img src={plantImg} alt="palms" className="palm-image" />
-    
-          {/* Top toggle (aesthetic only)
-          <div className="toggle-container">
-            <div className="toggle-switch">
-              <div className="toggle-left">✈️ Trips</div>
-              <div className="toggle-right">💬 Plan</div>
+          <div className="top"><img src={slothImg} alt="sloth" className="sloth-image" /> 
+            <div className="navbar">
+              <button
+                            onClick={() => navigate(`/triplist/${username}`)}
+                            className={`nav-link ${window.location.pathname.includes("triplist") ? "active" : ""}`}
+                          >
+                            <span className="icon">
+                              <img src={PlaneImg} alt="plane" className="plane-img" />
+                            </span>
+                            Trips
+                          </button>
+                          <button
+                            onClick={() => navigate(`/chat/${username}`)}
+                            className={`nav-link ${window.location.pathname.includes("chat") ? "active" : ""}`}
+                          >
+                            <span className="icon">
+                              <img src={ChatboxImg} alt="chatbox" className="chat-box-img" />
+                            </span>
+                            Plan
+                          </button>
             </div>
-          </div> */}
+          </div>
+          
+          <div className="tree"><img src={plantImg} alt="palms" className="palm-image" /> </div>
+          
     
           {/* Cards */}
+          <div className = "scroll">
           <div className="destination-card-list">
             {Array.isArray(trips) ? (
               trips.map((trip) => (
@@ -66,7 +82,7 @@ const TripList = () => {
               <p>No trips found.</p>
             )}
           </div>
-
+          </div>
         </div>
       );
     }
