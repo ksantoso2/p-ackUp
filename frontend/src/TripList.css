@@ -1,89 +1,106 @@
-/* General Reset and Base Styles */
+/* Base container: full page, column layout */
 .trip-list-container {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color:#eae2ea;
-    }
-  
-/* If you decide to use real images for decoration */
-  .sloth {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 8rem;
-    z-index: 10;
-  }
-  
-  .palms {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 12rem;
-    opacity: 0.3;
-  }
-  .destination-card-list {
-    display: flex;               /* This makes it a flex container */
-    flex-direction: column;      /* Stack items vertically */
-    align-items: center;         /* Center them horizontally */
-    gap: 2rem;                   /* Space between cards */
-    margin-top: 4rem;            /* Top margin from toggle */
-    padding-bottom: 4rem;
-  }
-  
-  .destination-card {
-    width: 85%;
-    max-width: 40rem;
-    height: 10rem;
-  
-    background-color: #eceae7;
-    border-radius: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  
-    padding: 0 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #374151;
-    transition: transform 0.2s ease;
-    text-decoration: none;
-  }
-  
-  .destination-card:hover {
-    transform: scale(1.02);
-  }
-  
-  .destination-name {
-    font-family: 'Inika', serif;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 36px;     /* 100% of font size */
-    letter-spacing: 0;
-    text-align: center;
-    flex: 1;               /* Fills available space in the card */
-  }
-  
-  .destination-icon {
-    font-size: 1.5rem;
-  }
-
-
-/* .plant-image{
-    position: absolute;
-    width: 323.88px;
-    height: 502.82px;
-    left: 1235px;
-    top: 518px;
-    transform: rotate(7.08deg);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #fdf9f5; /* light cream like screenshot */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
-.sloth-image{
-    position: absolute;
-    width: 472.57px;
-    height: 249.22px;
-    left: -28px;
-    top: -19.26px;
-} */
-  
+/* === Sloth image === */
+.sloth-image {
+  position: absolute;
+  top: -0;
+  left: 0;
+  z-index: 1;
+}
+
+/* === Palm image === */
+.palm-image {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 0;
+}
+
+/* === Navbar === */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  z-index: 5;
+}
+
+.navbar button {
+  background: #f4f2ef;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #3A3A3A;
+  font-family: 'Work Sans', sans-serif;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.2s ease;
+}
+
+.navbar .active {
+  background-color: #b6dce7; /* soft blue like screenshot */
+  color: #222;
+}
+
+.scroll{
+  overflow-y: auto;
+}
+
+/* === Scrollable card area === */
+.destination-card-list {
+  flex: 1;
+  padding: 3rem 1.5rem 6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  z-index: 2;
+}
+
+/* === Individual destination card === */
+.destination-card {
+  width: 100%;
+  max-width: 50rem;
+  height: 10rem;
+  background-color: #eceae7;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #374151;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  overflow: hidden; 
+  box-sizing: border-box; 
+}
+
+
+.destination-card:hover {
+  transform: scale(1.02);
+}
+
+.destination-name {
+  font-family: 'Inika', serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  flex: 1;
+  text-align: center;
+}
+
+.destination-icon {
+  font-size: 1.5rem;
+}
